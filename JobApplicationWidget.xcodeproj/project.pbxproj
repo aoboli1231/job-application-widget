@@ -18,6 +18,14 @@
 		B002 = {isa = PBXBuildFile; fileRef = B102; };
 		B003 = {isa = PBXBuildFile; fileRef = B103; };
 		C001 = {isa = PBXBuildFile; fileRef = C101; };
+		A009 = {isa = PBXBuildFile; fileRef = A106; };
+		A010 = {isa = PBXBuildFile; fileRef = A107; };
+		A011 = {isa = PBXBuildFile; fileRef = A108; };
+		B004 = {isa = PBXBuildFile; fileRef = A106; };
+		B005 = {isa = PBXBuildFile; fileRef = A107; };
+		B006 = {isa = PBXBuildFile; fileRef = A108; };
+		C002 = {isa = PBXBuildFile; fileRef = C102; };
+		C003 = {isa = PBXBuildFile; fileRef = C103; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +42,11 @@
 		B104 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobApplicationWidgetExtension.entitlements; sourceTree = "<group>"; };
 		C100 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = JobApplicationWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
+		A106 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/Job.swift; sourceTree = "<group>"; };
+		A107 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/DatabaseLocation.swift; sourceTree = "<group>"; };
+		A108 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WidgetSummary.swift; sourceTree = "<group>"; };
+		C102 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobModelTests.swift; sourceTree = "<group>"; };
+		C103 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseLocationTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,11 +56,11 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A300 = {isa = PBXGroup; children = (A101, A102, A103, A104, A105); path = JobApplicationWidget; sourceTree = "<group>"; };
+		A300 = {isa = PBXGroup; children = (A101, A102, A103, A104, A105, A106, A107, A108); path = JobApplicationWidget; sourceTree = "<group>"; };
 		B300 = {isa = PBXGroup; children = (B101, B102, B103, B104); path = JobApplicationWidgetWidget; sourceTree = "<group>"; };
 		A301 = {isa = PBXGroup; children = (A300, B300); sourceTree = "<group>"; };
 		A302 = {isa = PBXGroup; children = (A100, B100); name = Products; sourceTree = "<group>"; };
-		C300 = {isa = PBXGroup; children = (C101); path = JobApplicationWidgetTests; sourceTree = "<group>"; };
+		C300 = {isa = PBXGroup; children = (C101, C102, C103); path = JobApplicationWidgetTests; sourceTree = "<group>"; };
 		C301 = {isa = PBXGroup; children = (A300, B300, C300); sourceTree = "<group>"; };
 /* End PBXGroup section */
 
@@ -67,10 +80,10 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXRezBuildPhase section */
-		A600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A001, A002, A003); runOnlyForDeploymentPostprocessing = 0; };
-		B600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B001, B003); runOnlyForDeploymentPostprocessing = 0; };
+		A600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A001, A002, A003, A009, A010, A011); runOnlyForDeploymentPostprocessing = 0; };
+		B600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B001, B003, B004, B005, B006); runOnlyForDeploymentPostprocessing = 0; };
 		B601 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		C600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C001); runOnlyForDeploymentPostprocessing = 0; };
+		C600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C001, C002, C003); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXTargetDependency section */

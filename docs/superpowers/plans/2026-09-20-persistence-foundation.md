@@ -123,7 +123,7 @@ git commit -m "build: add macOS test target and shared app group"
 - Consumes: App Group `group.com.aobo.JobApplicationCopilot`.
 - Produces: `Job`, `JobStatus`, `RiskLevel`, `Eligibility`, `WidgetSummary`, and `DatabaseLocation.databaseURL(fileManager:) throws -> URL`.
 
-- [ ] **Step 1: Write failing model and location tests**
+- [x] **Step 1: Write failing model and location tests**
 
 ```swift
 func testJobRoundTripsWithoutLosingTrackingFields() throws {
@@ -139,7 +139,7 @@ func testMissingAppGroupThrows() {
 }
 ```
 
-- [ ] **Step 2: Run tests and confirm missing types fail compilation**
+- [x] **Step 2: Run tests and confirm missing types fail compilation**
 
 Run:
 
@@ -149,7 +149,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: FAIL because `Job` and `DatabaseLocation` do not exist.
 
-- [ ] **Step 3: Add the minimum typed model**
+- [x] **Step 3: Add the minimum typed model**
 
 ```swift
 enum JobStatus: String, Codable, CaseIterable { case new, review, preparing, ready, applied, interview, offer, rejected, archived }
@@ -187,11 +187,11 @@ struct WidgetSummary: Equatable {
 
 `DatabaseLocation` calls only `FileManager.containerURL(forSecurityApplicationGroupIdentifier:)`, appends `Library/Application Support/JobApplicationCopilot/jobs.sqlite3`, and throws if the container is unavailable. It must not fall back to `UserDefaults.standard` or a hard-coded home path.
 
-- [ ] **Step 4: Run model/location tests**
+- [x] **Step 4: Run model/location tests**
 
 Expected: PASS, including the explicit missing-container failure.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Shared/Job.swift Shared/DatabaseLocation.swift Shared/WidgetSummary.swift JobApplicationWidgetTests
