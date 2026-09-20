@@ -360,7 +360,7 @@ git commit -m "feat: gate worker on stable network"
 - Consumes: `NSWorkspace.willSleepNotification`, `NSWorkspace.didWakeNotification`, registered `Process` values, and registered URL-session cancellation closures.
 - Produces: `PowerEventSource.events() -> AsyncStream<PowerEvent>`, `WorkerResources.register(process:)`, `registerCancellation(_:)`, and `cancelAll()`.
 
-- [ ] **Step 1: Write failing observer and cancellation tests**
+- [x] **Step 1: Write failing observer and cancellation tests**
 
 ```swift
 func testWorkspaceNotificationsMapToPowerEvents() async throws {
@@ -384,19 +384,19 @@ func testCancelAllTerminatesProcessAndCancelsNetworkTask() {
 }
 ```
 
-- [ ] **Step 2: Run tests and verify missing types fail compilation**
+- [x] **Step 2: Run tests and verify missing types fail compilation**
 
 Run the full test command from Task 1.
 
-- [ ] **Step 3: Implement notification-backed events and resource ownership**
+- [x] **Step 3: Implement notification-backed events and resource ownership**
 
 Use notification observer tokens removed when the `AsyncStream` terminates. `WorkerResources.cancelAll()` snapshots and clears its registered resources under one `NSLock`, invokes cancellation closures, calls `terminate()` on running processes, waits at most 5 seconds through termination handlers, then calls `interrupt()` only if still running. Do not kill unrelated processes or identify children by process name.
 
-- [ ] **Step 4: Add lifecycle edge tests**
+- [x] **Step 4: Add lifecycle edge tests**
 
 Cover duplicate `cancelAll`, a process that exits before cancellation, stream termination removing observers, and registration after cancellation beginning. The last case must be cancelled immediately rather than escaping ownership.
 
-- [ ] **Step 5: Run focused tests and commit**
+- [x] **Step 5: Run focused tests and commit**
 
 ```bash
 git add Shared/PowerEvents.swift Shared/WorkerResources.swift \

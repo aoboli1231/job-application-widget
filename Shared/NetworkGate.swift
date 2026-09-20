@@ -227,7 +227,7 @@ final class NetworkGate {
 
     func waitUntilUsable() async throws {
         try await withTaskCancellationHandler {
-            try await withCheckedThrowingContinuation { continuation in
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Swift.Error>) in
                 queue.async {
                     guard !self.terminated else {
                         continuation.resume(throwing: CancellationError())
