@@ -124,6 +124,77 @@ final class SystemNetworkPathMonitor: NetworkPathMonitoring {
 
 protocol NetworkGateCancellation: AnyObject { func cancel() }
 
+protocol NetworkGating: AnyObject {
+    func waitUntilUsable() async throws -> NetworkLease
+    func reset()
+    func cancel()
+}
+
+final class NetworkLease {
+    enum Error: Swift.Error { case waiterAlreadyRegistered }
+
+    private let lock = NSLock()
+    private var invalidated = false
+    private var waiter: (id: UUID, continuation: CheckedContinuation<Void, Swift.Error>)?
+
+    var hasWaiter: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return waiter != nil
+    }
+
+    func waitForInvalidation() async throws {
+        let waiterID = UUID()
+        try await withTaskCancellationHandler {
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Swift.Error>) in
+                lock.lock()
+                if Task.isCancelled {
+                    lock.unlock()
+                    continuation.resume(throwing: CancellationError())
+                } else if invalidated {
+                    lock.unlock()
+                    continuation.resume()
+                } else if waiter != nil {
+                    lock.unlock()
+                    continuation.resume(throwing: Error.waiterAlreadyRegistered)
+                } else {
+                    waiter = (waiterID, continuation)
+                    lock.unlock()
+                }
+            }
+        } onCancel: {
+            self.cancelWaiter(id: waiterID)
+        }
+    }
+
+    func invalidate() {
+        lock.lock()
+        guard !invalidated else {
+            lock.unlock()
+            return
+        }
+        invalidated = true
+        let continuation = waiter?.continuation
+        waiter = nil
+        lock.unlock()
+        continuation?.resume()
+    }
+
+    private func cancelWaiter(id: UUID) {
+        lock.lock()
+        guard waiter?.id == id else {
+            lock.unlock()
+            return
+        }
+        let continuation = waiter?.continuation
+        waiter = nil
+        lock.unlock()
+        continuation?.resume(throwing: CancellationError())
+    }
+
+    deinit { invalidate() }
+}
+
 protocol OneShotTimerScheduling {
     func schedule(after interval: TimeInterval, handler: @escaping () -> Void) -> NetworkGateCancellation
 }
@@ -159,7 +230,7 @@ private final class DispatchTimerToken: NetworkGateCancellation {
     deinit { cancel() }
 }
 
-final class NetworkGate {
+final class NetworkGate: NetworkGating {
     enum Error: Swift.Error { case waiterAlreadyRegistered, invalidProbePolicy }
     typealias Delay = (TimeInterval) async throws -> Void
 
@@ -173,7 +244,8 @@ final class NetworkGate {
     private var machine: NetworkStabilityMachine
     private var timer: NetworkGateCancellation?
     private var probeTask: Task<Void, Never>?
-    private var waiter: CheckedContinuation<Void, Swift.Error>?
+    private var waiter: CheckedContinuation<NetworkLease, Swift.Error>?
+    private var currentLease: NetworkLease?
     private var monitorStarted = false
     private var lastPathSatisfied = false
     private var generation = 0
@@ -223,11 +295,12 @@ final class NetworkGate {
         monitor.cancel()
         monitor.updateHandler = nil
         waiter?.resume(throwing: CancellationError())
+        currentLease?.invalidate()
     }
 
-    func waitUntilUsable() async throws {
+    func waitUntilUsable() async throws -> NetworkLease {
         try await withTaskCancellationHandler {
-            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Swift.Error>) in
+            try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<NetworkLease, Swift.Error>) in
                 queue.async {
                     guard !self.terminated else {
                         continuation.resume(throwing: CancellationError())
@@ -238,7 +311,9 @@ final class NetworkGate {
                         return
                     }
                     if self.machine.state == .ready {
-                        continuation.resume()
+                        let lease = self.currentLease ?? NetworkLease()
+                        self.currentLease = lease
+                        continuation.resume(returning: lease)
                         return
                     }
                     self.waiter = continuation
@@ -268,6 +343,8 @@ final class NetworkGate {
             self.monitor.updateHandler = nil
             let waiter = self.waiter
             self.waiter = nil
+            self.currentLease?.invalidate()
+            self.currentLease = nil
             waiter?.resume(throwing: CancellationError())
         }
     }
@@ -300,11 +377,15 @@ final class NetworkGate {
         case .cancelAll:
             generation += 1
             cancelOwnedWork()
+            currentLease?.invalidate()
+            currentLease = nil
         case .ready:
             cancelTimer()
             let waiter = waiter
             self.waiter = nil
-            waiter?.resume()
+            let lease = NetworkLease()
+            currentLease = lease
+            waiter?.resume(returning: lease)
         case .none, .awaitPathEvent:
             break
         }

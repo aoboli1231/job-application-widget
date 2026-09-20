@@ -201,15 +201,15 @@ final class RunDatabaseTests: XCTestCase {
     func testCorruptRunFieldsThrowDuringTypedDecode() throws {
         let validID = UUID().uuidString
         let rows = [
-            ("UUID", "'not-a-uuid', 'scheduled', '2026-09-20', 'running', NULL, NULL, 1, NULL, NULL, 2"),
-            ("trigger", "'\(validID)', 'invented', '2026-09-20', 'running', NULL, NULL, 1, NULL, NULL, 2"),
-            ("status", "'\(validID)', 'scheduled', '2026-09-20', 'invented', NULL, NULL, 1, NULL, NULL, 2"),
-            ("local day", "'\(validID)', 'scheduled', '2026-02-30', 'running', NULL, NULL, 1, NULL, NULL, 2"),
-            ("JSON", "'\(validID)', 'scheduled', '2026-09-20', 'running', 'source', X'6E6F74206A736F6E', 1, NULL, NULL, 2"),
-            ("date", "'\(validID)', 'scheduled', '2026-09-20', 'running', NULL, NULL, 'bad', NULL, NULL, 2")
+            ("UUID", "2026-09-20", "'not-a-uuid', 'scheduled', '2026-09-20', 'running', NULL, NULL, 1, NULL, NULL, 2"),
+            ("trigger", "2026-09-20", "'\(validID)', 'invented', '2026-09-20', 'running', NULL, NULL, 1, NULL, NULL, 2"),
+            ("status", "2026-09-20", "'\(validID)', 'scheduled', '2026-09-20', 'invented', NULL, NULL, 1, NULL, NULL, 2"),
+            ("local day", "2026-02-30", "'\(validID)', 'scheduled', '2026-02-30', 'running', NULL, NULL, 1, NULL, NULL, 2"),
+            ("JSON", "2026-09-20", "'\(validID)', 'scheduled', '2026-09-20', 'running', 'source', X'6E6F74206A736F6E', 1, NULL, NULL, 2"),
+            ("date", "2026-09-20", "'\(validID)', 'scheduled', '2026-09-20', 'running', NULL, NULL, 'bad', NULL, NULL, 2")
         ]
 
-        for (field, values) in rows {
+        for (field, lookupDay, values) in rows {
             let url = TestDatabase.uniqueURL()
             let database = try JobDatabase(url: url)
             try TestDatabase.executeRaw(at: url, """
@@ -217,7 +217,7 @@ final class RunDatabaseTests: XCTestCase {
                 INSERT INTO runs VALUES (\(values));
                 """)
             XCTAssertThrowsError(
-                try database.latestResumableRun(localDay: "2026-09-20"),
+                try database.latestResumableRun(localDay: lookupDay),
                 "Corrupt \(field) should throw"
             )
         }

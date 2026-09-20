@@ -12,7 +12,10 @@ final class WorkerLockTests: XCTestCase {
         )
         XCTAssertEqual(
             paths.backupDirectoryURL,
-            container.appendingPathComponent("Library/Application Support/JobApplicationCopilot/Backups")
+            container.appendingPathComponent(
+                "Library/Application Support/JobApplicationCopilot/Backups",
+                isDirectory: true
+            )
         )
         XCTAssertEqual(
             paths.launchAgentPlistURL,

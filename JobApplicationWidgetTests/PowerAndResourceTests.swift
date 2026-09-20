@@ -19,21 +19,24 @@ final class PowerAndResourceTests: XCTestCase {
         center.post(name: NSWorkspace.willSleepNotification, object: nil)
         center.post(name: NSWorkspace.didWakeNotification, object: nil)
 
-        XCTAssertEqual(await task.value, [.willSleep, .didWake])
+        let events = await task.value
+        XCTAssertEqual(events, [.willSleep, .didWake])
     }
 
     func testCancellingOneSubscriberDoesNotAffectAnother() async {
         let center = NotificationCenter()
         let source = WorkspacePowerEvents(center: center)
         let firstReceived = expectation(description: "first subscriber received sleep")
+        let firstStream = source.events()
+        let secondStream = source.events()
         let first = Task {
-            for await event in source.events() where event == .willSleep {
+            for await event in firstStream where event == .willSleep {
                 firstReceived.fulfill()
             }
         }
         let second = Task { () -> [PowerEvent] in
             var events: [PowerEvent] = []
-            for await event in source.events() {
+            for await event in secondStream {
                 events.append(event)
                 if events.count == 2 { break }
             }
@@ -46,7 +49,8 @@ final class PowerAndResourceTests: XCTestCase {
         await first.value
         center.post(name: NSWorkspace.didWakeNotification, object: nil)
 
-        XCTAssertEqual(await second.value, [.willSleep, .didWake])
+        let events = await second.value
+        XCTAssertEqual(events, [.willSleep, .didWake])
     }
 
     func testCancelAllCancelsAndTerminatesExplicitResourcesOnce() {

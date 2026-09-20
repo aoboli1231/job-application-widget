@@ -4,6 +4,86 @@ import XCTest
 final class NetworkGateTests: XCTestCase {
     private let urls = [URL(string: "https://one.test/")!, URL(string: "https://two.test/")!]
 
+    func testLeaseRemembersInvalidationBeforeWaiterRegisters() async throws {
+        let lease = NetworkLease()
+        lease.invalidate()
+        try await lease.waitForInvalidation()
+    }
+
+    func testCancellingLeaseWaiterDoesNotInvalidateLease() async throws {
+        let lease = NetworkLease()
+        let first = Task { try await lease.waitForInvalidation() }
+        first.cancel()
+        do {
+            try await first.value
+            XCTFail("Cancelled waiter unexpectedly succeeded")
+        } catch is CancellationError {
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        let second = Task { try await lease.waitForInvalidation() }
+        lease.invalidate()
+        try await second.value
+    }
+
+    func testLeaseRejectsASecondConcurrentWaiter() async throws {
+        let lease = NetworkLease()
+        let first = Task { try await lease.waitForInvalidation() }
+        while !lease.hasWaiter { await Task.yield() }
+        do {
+            try await lease.waitForInvalidation()
+            XCTFail("Second waiter unexpectedly succeeded")
+        } catch NetworkLease.Error.waiterAlreadyRegistered {
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+        lease.invalidate()
+        try await first.value
+    }
+
+    func testReadyLeaseRemembersImmediatePathLoss() async throws {
+        let started = expectation(description: "monitor started")
+        let armed = expectation(description: "timer armed")
+        let monitor = FakePathMonitor(onStart: { started.fulfill() })
+        let timers = FakeTimerScheduler(onSchedule: { armed.fulfill() })
+        let requester = ScriptedRequester(results: [.success(204), .success(204)])
+        var now: TimeInterval = 0
+        let gate = makeGate(monitor, timers, requester, now: { now })
+        let readyTask = Task { try await gate.waitUntilUsable() }
+
+        await fulfillment(of: [started])
+        monitor.emit(satisfied: true)
+        await fulfillment(of: [armed])
+        now = 60
+        timers.fireLatest()
+        let lease = try await readyTask.value
+
+        monitor.emit(satisfied: false)
+        try await lease.waitForInvalidation()
+    }
+
+    func testRepeatedReadyWaitReturnsSameLease() async throws {
+        let started = expectation(description: "monitor started")
+        let armed = expectation(description: "timer armed")
+        let monitor = FakePathMonitor(onStart: { started.fulfill() })
+        let timers = FakeTimerScheduler(onSchedule: { armed.fulfill() })
+        let requester = ScriptedRequester(results: [.success(204), .success(204)])
+        var now: TimeInterval = 0
+        let gate = makeGate(monitor, timers, requester, now: { now })
+        let readyTask = Task { try await gate.waitUntilUsable() }
+
+        await fulfillment(of: [started])
+        monitor.emit(satisfied: true)
+        await fulfillment(of: [armed])
+        now = 60
+        timers.fireLatest()
+        let first = try await readyTask.value
+        let second = try await gate.waitUntilUsable()
+
+        XCTAssertTrue(first === second)
+    }
+
     func testPathDropAtSecondFiftyNineRestartsFullWindow() {
         var machine = NetworkStabilityMachine(stableInterval: 60)
         XCTAssertEqual(machine.handle(.pathSatisfied, now: 0), .arm(deadline: 60))
@@ -244,23 +324,27 @@ final class NetworkGateTests: XCTestCase {
         var now: TimeInterval = 0
         let gate = makeGate(monitor, timers, requester, now: { now })
 
-        Task { try await gate.waitUntilUsable(); firstReady.fulfill() }
+        let firstTask = Task { let lease = try await gate.waitUntilUsable(); firstReady.fulfill(); return lease }
         await fulfillment(of: [started])
         monitor.emit(satisfied: true)
         await fulfillment(of: [firstArm])
         now = 60
         timers.fireLatest()
         await fulfillment(of: [firstReady])
+        let firstLease = try await firstTask.value
 
         gate.reset()
-        Task { try await gate.waitUntilUsable(); secondReady.fulfill() }
+        let secondTask = Task { let lease = try await gate.waitUntilUsable(); secondReady.fulfill(); return lease }
         await fulfillment(of: [secondArm])
         now = 120
         timers.fireLatest()
         await fulfillment(of: [secondReady])
+        let secondLease = try await secondTask.value
+        try await firstLease.waitForInvalidation()
 
         XCTAssertEqual(monitor.startCount, 1)
         XCTAssertEqual(requester.callCount, 4)
+        XCTAssertFalse(firstLease === secondLease)
     }
 
     func testLatePathEventAfterCancelCannotArmTimer() async {

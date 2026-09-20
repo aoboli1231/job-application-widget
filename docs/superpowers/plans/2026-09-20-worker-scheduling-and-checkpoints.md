@@ -415,6 +415,8 @@ git commit -m "feat: stop worker resources for sleep"
 - Consumes: `MelbourneSchedule`, `JobDatabase` run APIs, `WorkerLock`, `NetworkGate`, `PowerEventSource`, `WorkerResources`, and a `WorkerPerforming` implementation.
 - Produces: `WorkerCoordinator.run(trigger:force:) async -> WorkerExit`, plus `WorkerPerforming.perform(from:checkpoint:resources:) async throws -> WorkerCheckpoint`.
 
+`NetworkGate.waitUntilUsable()` returns a memory-backed `NetworkLease`; its `waitForInvalidation()` completes on path loss, reset, or cancellation even when invalidation happened before the listener registered. This reuses the gate's single monitor and closes the ready-to-listener race. Inject `SuccessfulRunBackupWriting` without a production no-op; Task 6 supplies its real implementation. Create a fresh one-shot `WorkerResources` for every performer attempt and keep one power-event subscription for the whole coordinator run.
+
 - [ ] **Step 1: Define the minimum performer seam and write failing due/force tests**
 
 ```swift
