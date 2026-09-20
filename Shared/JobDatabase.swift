@@ -109,6 +109,15 @@ final class JobDatabase {
         try write { try bindAndUpsert(job, preservingTracking: preservingTracking) }
     }
 
+    func delete(id: UUID) throws {
+        try write {
+            let statement = try prepare("DELETE FROM jobs WHERE id = ?")
+            defer { sqlite3_finalize(statement) }
+            try bind(id.uuidString, to: statement, at: 1)
+            try stepToDone(statement)
+        }
+    }
+
     func setStatus(id: UUID, status: JobStatus, at: Date = Date()) throws {
         try write {
             let statement = try prepare("""

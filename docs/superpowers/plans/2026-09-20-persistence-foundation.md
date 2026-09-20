@@ -325,7 +325,7 @@ git commit -m "feat: add transactional SQLite job store"
 - Consumes: legacy `[JobApplication]`, optional agent JSON, `JobDatabase`.
 - Produces: `LegacyJobMigrator.migrateIfNeeded(defaults:agentJSONURL:database:) throws -> MigrationResult` and migration marker `legacy-v1-complete` stored in SQLite metadata.
 
-- [ ] **Step 1: Write failing preservation and duplicate tests**
+- [x] **Step 1: Write failing preservation and duplicate tests**
 
 ```swift
 func testMigrationPreservesAppliedWestpacAndAllNineJobs() throws {
@@ -368,21 +368,21 @@ func testFailedMigrationRollsBackRowsAndMarker() throws {
 }
 ```
 
-- [ ] **Step 2: Run focused tests and verify failure**
+- [x] **Step 2: Run focused tests and verify failure**
 
 Expected: FAIL because `LegacyJobMigrator` is undefined.
 
-- [ ] **Step 3: Implement one-time migration**
+- [x] **Step 3: Implement one-time migration**
 
 Map `applied == true` to `.applied`, otherwise map known legacy strings and default unknown strings to `.new`. Preserve priority, full-time/work type, match score, match reason, status, notes, and URL; clamp legacy match values to `0...100`.
 
 Resolve duplicates inside one transaction in order: platform ID, canonical URL, then UUID. If platform ID and URL match different rows, choose the oldest local row as survivor, copy the strongest local tracking state (`offer`/`interview`/`applied` before pre-application states), keep non-empty notes and applied date, repoint imported source data to the survivor, then delete the alias row. Insert seed records only when neither legacy defaults nor database rows exist. Write `legacy-v1-complete` to the Task 3 metadata table in the same transaction; any row or marker failure rolls back the entire import.
 
-- [ ] **Step 4: Run migration tests twice**
+- [x] **Step 4: Run migration tests twice**
 
 The second migration must report `alreadyCompleted == true` and leave row count, IDs, status, notes, and dates unchanged.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Shared/ApplicationModel.swift Shared/LegacyJobMigrator.swift JobApplicationWidgetTests data/jobs.json
