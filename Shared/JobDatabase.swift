@@ -9,6 +9,7 @@ final class JobDatabase {
 
     private var db: OpaquePointer?
     private var inTransaction = false
+    private static let terminalStatuses: Set<RunStatus> = [.succeeded, .failed]
 
     init(url: URL, mode: ConnectionMode = .readWrite) throws {
         if mode == .readWrite {
@@ -45,40 +46,25 @@ final class JobDatabase {
 
     func migrate() throws {
         try withTransaction {
-            try execute("""
-                CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL);
-                CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
-                CREATE TABLE IF NOT EXISTS jobs (
-                  id TEXT PRIMARY KEY,
-                  company TEXT NOT NULL,
-                  role TEXT NOT NULL,
-                  location TEXT NOT NULL,
-                  priority INTEGER NOT NULL,
-                  work_type TEXT,
-                  is_full_time INTEGER,
-                  status TEXT NOT NULL,
-                  notes TEXT NOT NULL,
-                  applied_at REAL,
-                  published_at REAL,
-                  deadline REAL,
-                  match_score INTEGER CHECK(match_score BETWEEN 0 AND 100),
-                  match_reason TEXT NOT NULL,
-                  risk TEXT NOT NULL,
-                  eligibility TEXT NOT NULL,
-                  canonical_url TEXT,
-                  platform_job_id TEXT,
-                  updated_at REAL NOT NULL
-                );
-                CREATE UNIQUE INDEX IF NOT EXISTS jobs_platform_id
-                  ON jobs(platform_job_id) WHERE platform_job_id IS NOT NULL;
-                CREATE UNIQUE INDEX IF NOT EXISTS jobs_canonical_url
-                  ON jobs(canonical_url) WHERE canonical_url IS NOT NULL;
-                INSERT INTO schema_version(version)
-                  SELECT 1 WHERE NOT EXISTS (SELECT 1 FROM schema_version);
-                """)
-            let versions = try schemaVersions()
-            guard versions == [1] else {
+            try execute("CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL)")
+            switch try schemaVersions() {
+            case []:
+                try createFoundationSchema()
+                try createRunsSchema()
+                try execute("INSERT INTO schema_version(version) VALUES(2)")
+            case [1]:
+                try createRunsSchema()
+                try execute("UPDATE schema_version SET version = 2 WHERE version = 1")
+                guard sqlite3_changes(db) == 1 else {
+                    throw Error.invalidData("Schema upgrade did not update exactly one row")
+                }
+            case [2]:
+                break
+            case let versions:
                 throw Error.invalidData("Unsupported schema versions: \(versions)")
+            }
+            guard try schemaVersions() == [2] else {
+                throw Error.invalidData("Schema migration did not finish at version 2")
             }
         }
     }
@@ -115,6 +101,125 @@ final class JobDatabase {
             defer { sqlite3_finalize(statement) }
             try bind(id.uuidString, to: statement, at: 1)
             try stepToDone(statement)
+        }
+    }
+
+    func schemaVersion() throws -> Int {
+        let versions = try schemaVersions()
+        guard versions.count == 1, let version = versions.first else {
+            throw Error.invalidData("Expected one schema version, found: \(versions)")
+        }
+        return version
+    }
+
+    func createRun(trigger: RunTrigger, localDay: String, at: Date) throws -> UUID {
+        guard Self.isValidLocalDay(localDay) else {
+            throw Error.invalidData("Invalid runs.local_day: \(localDay)")
+        }
+        let id = UUID()
+        try write {
+            let statement = try prepare("""
+                INSERT INTO runs(id, trigger, local_day, status, started_at, updated_at)
+                VALUES(?, ?, ?, ?, ?, ?)
+                """)
+            defer { sqlite3_finalize(statement) }
+            try bind(id.uuidString, to: statement, at: 1)
+            try bind(trigger.rawValue, to: statement, at: 2)
+            try bind(localDay, to: statement, at: 3)
+            try bind(RunStatus.waitingForNetwork.rawValue, to: statement, at: 4)
+            try bind(at.timeIntervalSince1970, to: statement, at: 5)
+            try bind(at.timeIntervalSince1970, to: statement, at: 6)
+            try stepToDone(statement)
+        }
+        return id
+    }
+
+    func setRunStatus(id: UUID, status: RunStatus, at: Date) throws {
+        guard !Self.terminalStatuses.contains(status) else {
+            throw Error.invalidData("Use finishRun for terminal status: \(status.rawValue)")
+        }
+        try write {
+            let statement = try prepare("UPDATE runs SET status = ?, updated_at = ? WHERE id = ?")
+            defer { sqlite3_finalize(statement) }
+            try bind(status.rawValue, to: statement, at: 1)
+            try bind(at.timeIntervalSince1970, to: statement, at: 2)
+            try bind(id.uuidString, to: statement, at: 3)
+            try stepToDone(statement)
+            try requireOneChangedRow("update run status")
+        }
+    }
+
+    func saveCheckpoint(runID: UUID, stage: String, payload: Data, at: Date) throws {
+        guard (try? JSONSerialization.jsonObject(with: payload)) != nil else {
+            throw Error.invalidData("Checkpoint payload is not JSON")
+        }
+        try write {
+            let statement = try prepare("""
+                UPDATE runs
+                SET checkpoint_stage = ?, checkpoint_json = ?, updated_at = ?
+                WHERE id = ?
+                """)
+            defer { sqlite3_finalize(statement) }
+            try bind(stage, to: statement, at: 1)
+            try bind(payload, to: statement, at: 2)
+            try bind(at.timeIntervalSince1970, to: statement, at: 3)
+            try bind(runID.uuidString, to: statement, at: 4)
+            try stepToDone(statement)
+            try requireOneChangedRow("save run checkpoint")
+        }
+    }
+
+    func finishRun(id: UUID, status: RunStatus, error: String?, at: Date) throws {
+        guard Self.terminalStatuses.contains(status) else {
+            throw Error.invalidData("Run can finish only as succeeded or failed")
+        }
+        try write {
+            let statement = try prepare("""
+                UPDATE runs
+                SET status = ?, error = ?, finished_at = ?, updated_at = ?
+                WHERE id = ?
+                """)
+            defer { sqlite3_finalize(statement) }
+            try bind(status.rawValue, to: statement, at: 1)
+            try bind(error, to: statement, at: 2)
+            try bind(at.timeIntervalSince1970, to: statement, at: 3)
+            try bind(at.timeIntervalSince1970, to: statement, at: 4)
+            try bind(id.uuidString, to: statement, at: 5)
+            try stepToDone(statement)
+            try requireOneChangedRow("finish run")
+        }
+    }
+
+    func hasSuccessfulRun(localDay: String) throws -> Bool {
+        let statement = try prepare("""
+            SELECT 1 FROM runs
+            WHERE local_day = ? AND status = 'succeeded'
+            LIMIT 1
+            """)
+        defer { sqlite3_finalize(statement) }
+        try bind(localDay, to: statement, at: 1)
+        switch sqlite3_step(statement) {
+        case SQLITE_ROW: return true
+        case SQLITE_DONE: return false
+        default: throw Error.sqlite(Self.message(db))
+        }
+    }
+
+    func latestResumableRun(localDay: String) throws -> RunRecord? {
+        let statement = try prepare("""
+            SELECT id, trigger, local_day, status, checkpoint_stage, checkpoint_json,
+                   started_at, finished_at, error, updated_at
+            FROM runs
+            WHERE local_day = ? AND status NOT IN ('succeeded', 'failed')
+            ORDER BY updated_at DESC, id DESC
+            LIMIT 1
+            """)
+        defer { sqlite3_finalize(statement) }
+        try bind(localDay, to: statement, at: 1)
+        switch sqlite3_step(statement) {
+        case SQLITE_ROW: return try decodeRun(statement)
+        case SQLITE_DONE: return nil
+        default: throw Error.sqlite(Self.message(db))
         }
     }
 
@@ -312,6 +417,109 @@ final class JobDatabase {
         return job
     }
 
+    private func decodeRun(_ statement: OpaquePointer) throws -> RunRecord {
+        let idText = try requiredText(statement, 0, "runs.id")
+        let triggerText = try requiredText(statement, 1, "runs.trigger")
+        let localDay = try requiredText(statement, 2, "runs.local_day")
+        let statusText = try requiredText(statement, 3, "runs.status")
+        guard let id = UUID(uuidString: idText) else {
+            throw Error.invalidData("Invalid runs.id: \(idText)")
+        }
+        guard let trigger = RunTrigger(rawValue: triggerText) else {
+            throw Error.invalidData("Invalid runs.trigger: \(triggerText)")
+        }
+        guard Self.isValidLocalDay(localDay) else {
+            throw Error.invalidData("Invalid runs.local_day: \(localDay)")
+        }
+        guard let status = RunStatus(rawValue: statusText) else {
+            throw Error.invalidData("Invalid runs.status: \(statusText)")
+        }
+        let payload = try optionalBlob(statement, 5, "runs.checkpoint_json")
+        if let payload, (try? JSONSerialization.jsonObject(with: payload)) == nil {
+            throw Error.invalidData("Invalid runs.checkpoint_json")
+        }
+        return RunRecord(
+            id: id,
+            trigger: trigger,
+            localDay: localDay,
+            status: status,
+            checkpointStage: try optionalText(statement, 4, "runs.checkpoint_stage"),
+            checkpointPayload: payload,
+            startedAt: try requiredDate(statement, 6, "runs.started_at"),
+            finishedAt: try optionalDate(statement, 7, "runs.finished_at"),
+            error: try optionalText(statement, 8, "runs.error"),
+            updatedAt: try requiredDate(statement, 9, "runs.updated_at")
+        )
+    }
+
+    private func createFoundationSchema() throws {
+        try execute("""
+            CREATE TABLE metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+            CREATE TABLE jobs (
+              id TEXT PRIMARY KEY,
+              company TEXT NOT NULL,
+              role TEXT NOT NULL,
+              location TEXT NOT NULL,
+              priority INTEGER NOT NULL,
+              work_type TEXT,
+              is_full_time INTEGER,
+              status TEXT NOT NULL,
+              notes TEXT NOT NULL,
+              applied_at REAL,
+              published_at REAL,
+              deadline REAL,
+              match_score INTEGER CHECK(match_score BETWEEN 0 AND 100),
+              match_reason TEXT NOT NULL,
+              risk TEXT NOT NULL,
+              eligibility TEXT NOT NULL,
+              canonical_url TEXT,
+              platform_job_id TEXT,
+              updated_at REAL NOT NULL
+            );
+            CREATE UNIQUE INDEX jobs_platform_id
+              ON jobs(platform_job_id) WHERE platform_job_id IS NOT NULL;
+            CREATE UNIQUE INDEX jobs_canonical_url
+              ON jobs(canonical_url) WHERE canonical_url IS NOT NULL;
+            """)
+    }
+
+    private func createRunsSchema() throws {
+        try execute("""
+            CREATE TABLE runs (
+              id TEXT PRIMARY KEY,
+              trigger TEXT NOT NULL CHECK(trigger IN ('scheduled', 'manual')),
+              local_day TEXT NOT NULL,
+              status TEXT NOT NULL CHECK(status IN (
+                'waitingForNetwork', 'running', 'suspended', 'succeeded', 'failed'
+              )),
+              checkpoint_stage TEXT,
+              checkpoint_json BLOB,
+              started_at REAL NOT NULL,
+              finished_at REAL,
+              error TEXT,
+              updated_at REAL NOT NULL
+            );
+            CREATE INDEX runs_local_day_status ON runs(local_day, status);
+            """)
+    }
+
+    private func requireOneChangedRow(_ operation: String) throws {
+        guard sqlite3_changes(db) == 1 else {
+            throw Error.invalidData("Could not \(operation): run was not found")
+        }
+    }
+
+    private static func isValidLocalDay(_ value: String) -> Bool {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.timeZone = MelbourneSchedule.timeZone
+        formatter.dateFormat = "yyyy-MM-dd"
+        formatter.isLenient = false
+        guard let date = formatter.date(from: value) else { return false }
+        return formatter.string(from: date) == value
+    }
+
     private func schemaVersions() throws -> [Int] {
         let statement = try prepare("SELECT version FROM schema_version ORDER BY version")
         defer { sqlite3_finalize(statement) }
@@ -361,6 +569,10 @@ final class JobDatabase {
             result = sqlite3_bind_int64(statement, index, sqlite3_int64(value))
         case let value as Double:
             result = sqlite3_bind_double(statement, index, value)
+        case let value as Data:
+            result = value.withUnsafeBytes { bytes in
+                sqlite3_bind_blob(statement, index, bytes.baseAddress, Int32(bytes.count), sqliteTransient)
+            }
         case nil:
             result = sqlite3_bind_null(statement, index)
         default:
@@ -396,6 +608,20 @@ final class JobDatabase {
         return try requiredInt(statement, index, column)
     }
 
+    private func optionalBlob(_ statement: OpaquePointer, _ index: Int32, _ column: String) throws -> Data? {
+        let type = sqlite3_column_type(statement, index)
+        if type == SQLITE_NULL { return nil }
+        guard type == SQLITE_BLOB else {
+            throw Error.invalidData("Invalid \(column)")
+        }
+        let count = Int(sqlite3_column_bytes(statement, index))
+        guard count > 0 else { return Data() }
+        guard let bytes = sqlite3_column_blob(statement, index) else {
+            throw Error.invalidData("Invalid \(column)")
+        }
+        return Data(bytes: bytes, count: count)
+    }
+
     private func requiredDate(_ statement: OpaquePointer, _ index: Int32, _ column: String) throws -> Date {
         guard let date = try optionalDate(statement, index, column) else {
             throw Error.invalidData("Missing \(column)")
@@ -409,7 +635,11 @@ final class JobDatabase {
         guard type == SQLITE_FLOAT || type == SQLITE_INTEGER else {
             throw Error.invalidData("Invalid \(column)")
         }
-        return Date(timeIntervalSince1970: sqlite3_column_double(statement, index))
+        let seconds = sqlite3_column_double(statement, index)
+        guard seconds.isFinite else {
+            throw Error.invalidData("Invalid \(column)")
+        }
+        return Date(timeIntervalSince1970: seconds)
     }
 
     private static func message(_ db: OpaquePointer?) -> String {

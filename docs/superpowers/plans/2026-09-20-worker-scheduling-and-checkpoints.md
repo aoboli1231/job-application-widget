@@ -69,7 +69,7 @@
 - Consumes: `JobDatabase.init(url:mode:)`, its existing transaction and binding helpers, and schema version 1.
 - Produces: `RunTrigger`, `RunStatus`, `RunRecord`, `MelbourneSchedule`, `JobDatabase.createRun(trigger:localDay:at:)`, `saveCheckpoint(runID:stage:payload:at:)`, `finishRun(id:status:error:at:)`, `hasSuccessfulRun(localDay:)`, and `latestResumableRun(localDay:)`.
 
-- [ ] **Step 1: Write failing schedule and schema-upgrade tests**
+- [x] **Step 1: Write failing schedule and schema-upgrade tests**
 
 ```swift
 func testMelbourneScheduleUsesEightAMAcrossDST() throws {
@@ -95,7 +95,7 @@ func testFailedUpgradeLeavesVersionOneAndNoRunsTable() throws {
 }
 ```
 
-- [ ] **Step 2: Run the focused tests and verify they fail**
+- [x] **Step 2: Run the focused tests and verify they fail**
 
 Run:
 
@@ -107,7 +107,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: FAIL because `RunRecord`, `MelbourneSchedule`, and schema version 2 do not exist.
 
-- [ ] **Step 3: Define the minimum run model and schedule policy**
+- [x] **Step 3: Define the minimum run model and schedule policy**
 
 ```swift
 enum RunTrigger: String, Codable { case scheduled, manual }
@@ -137,7 +137,7 @@ struct MelbourneSchedule {
 
 Use a Gregorian `Calendar` pinned to `Australia/Melbourne`; format `localDay` as `yyyy-MM-dd` with a POSIX locale. `isDue` returns true at or after local 08:00.
 
-- [ ] **Step 4: Replace the one-version migration with an atomic 1→2 migration**
+- [x] **Step 4: Replace the one-version migration with an atomic 1→2 migration**
 
 Schema 2 adds only:
 
@@ -160,7 +160,7 @@ UPDATE schema_version SET version = 2 WHERE version = 1;
 
 On a new database, create the existing jobs/metadata schema and `runs` in one transaction and insert version 2. On version 1, create `runs` and update the single version row in one transaction. Accept exactly `[2]` after migration; reject empty, duplicate, zero, or future versions. Do not drop or replace the database on failure.
 
-- [ ] **Step 5: Add typed run/checkpoint tests and APIs**
+- [x] **Step 5: Add typed run/checkpoint tests and APIs**
 
 ```swift
 func testCheckpointRoundTripsAndLatestIncompleteRunResumes() throws {
@@ -184,7 +184,7 @@ func testOnlySucceededRunSatisfiesDailyGate() throws {
 
 Validate checkpoint payload with `JSONSerialization.jsonObject(with:)` before binding. Decode rows without force unwraps and distinguish `SQLITE_DONE` from step errors, matching existing `JobDatabase` safety rules.
 
-- [ ] **Step 6: Run focused and full persistence tests**
+- [x] **Step 6: Run focused and full persistence tests**
 
 Run the focused command from Step 2, then:
 
@@ -195,7 +195,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: schema-1 upgrade, rollback, checkpoint, success-gate, existing job, migration, and store tests all PASS.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add Shared/RunRecord.swift Shared/JobDatabase.swift \

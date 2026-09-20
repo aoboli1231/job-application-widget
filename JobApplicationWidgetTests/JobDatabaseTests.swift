@@ -155,7 +155,7 @@ final class JobDatabaseTests: XCTestCase {
         let url = TestDatabase.uniqueURL()
         try TestDatabase.executeRaw(
             at: url,
-            "CREATE TABLE schema_version(version INTEGER NOT NULL); INSERT INTO schema_version VALUES(2);"
+            "CREATE TABLE schema_version(version INTEGER NOT NULL); INSERT INTO schema_version VALUES(3);"
         )
         XCTAssertThrowsError(try JobDatabase(url: url, mode: .readWrite))
     }
