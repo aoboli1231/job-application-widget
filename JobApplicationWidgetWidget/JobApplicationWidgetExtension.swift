@@ -21,7 +21,7 @@ struct ApplicationProvider: TimelineProvider {
     }
 
     private func makeEntry() -> ApplicationEntry {
-        let defaults = UserDefaults(suiteName: "group.com.example.JobApplicationWidget") ?? .standard
+        let defaults = UserDefaults(suiteName: "group.com.aobo.JobApplicationCopilot") ?? .standard
         let applications = (defaults.data(forKey: "jobApplicationWidget.applications.v1")
             .flatMap { try? JSONDecoder().decode([JobApplication].self, from: $0) }) ?? initialApplications
         return ApplicationEntry(date: .now, openCount: applications.filter { !$0.applied }.count, topApplications: Array(applications.prefix(3)))

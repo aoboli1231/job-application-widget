@@ -49,7 +49,7 @@
 
 **Files:**
 - Modify: `JobApplicationWidget.xcodeproj/project.pbxproj`
-- Create: `JobApplicationWidgetTests/TestDatabase.swift`
+- Create: `JobApplicationWidgetTests/ProjectSmokeTests.swift`
 - Modify: `JobApplicationWidget/JobApplicationWidget.entitlements`
 - Modify: `JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements`
 
@@ -57,7 +57,7 @@
 - Consumes: existing app target `JobApplicationWidget` and extension target `JobApplicationWidgetExtension`.
 - Produces: XCTest target `JobApplicationWidgetTests`; shared App Group identifier `group.com.aobo.JobApplicationCopilot`; correct extension entitlement path.
 
-- [ ] **Step 1: Add the XCTest target and a smoke test**
+- [x] **Step 1: Add the XCTest target and a smoke test**
 
 ```swift
 import XCTest
@@ -70,7 +70,7 @@ final class ProjectSmokeTests: XCTestCase {
 }
 ```
 
-- [ ] **Step 2: Run the test and verify project wiring**
+- [x] **Step 2: Run the test and verify project wiring**
 
 Run:
 
@@ -80,7 +80,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: the smoke test passes and the Widget entitlement file is found; the current malformed `JobApplicationWidget/JobApplicationWidgetWidget/...` path is absent from build settings.
 
-- [ ] **Step 3: Use one App Group value in both entitlement files**
+- [x] **Step 3: Use one App Group value in both entitlement files**
 
 ```xml
 <key>com.apple.security.application-groups</key>
@@ -91,7 +91,7 @@ Expected: the smoke test passes and the Widget entitlement file is found; the cu
 
 Do not set `DEVELOPMENT_TEAM`; unsigned CI/local builds remain possible, and a real Apple team is selected during release provisioning.
 
-- [ ] **Step 4: Re-run tests and inspect build settings**
+- [x] **Step 4: Re-run tests and inspect build settings**
 
 Run:
 
@@ -99,9 +99,11 @@ Run:
 xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget -showBuildSettings | rg 'PRODUCT_BUNDLE_IDENTIFIER|CODE_SIGN_ENTITLEMENTS|MACOSX_DEPLOYMENT_TARGET'
 ```
 
-Expected: macOS 13.0 for both targets, valid entitlement paths, and distinct app/extension bundle IDs.
+Expected: macOS 13.0 for both targets, valid entitlement paths, app ID `com.aobo.JobApplicationCopilot`, extension ID `com.aobo.JobApplicationCopilot.extension`, and no remaining `com.example` identity.
 
-- [ ] **Step 5: Commit**
+This task proves the unsigned build and test path only. Before signed App Group integration, select the user's real Apple Development team and register both bundle IDs plus `group.com.aobo.JobApplicationCopilot`; keep the team selection in uncommitted local Xcode settings rather than hard-coding it in the repository.
+
+- [x] **Step 5: Commit**
 
 ```bash
 git add JobApplicationWidget.xcodeproj JobApplicationWidget JobApplicationWidgetWidget JobApplicationWidgetTests
@@ -159,12 +161,16 @@ struct Job: Identifiable, Codable, Equatable {
     var company: String
     var role: String
     var location: String
+    var priority: Int = 99
+    var workType: String?
+    var isFullTime: Bool?
     var status: JobStatus = .new
     var notes = ""
     var appliedAt: Date?
     var publishedAt: Date?
     var deadline: Date?
     var matchScore: Int?
+    var matchReason = ""
     var risk: RiskLevel = .needsReview
     var eligibility: Eligibility = .unclear
     var canonicalURL: URL?
@@ -202,7 +208,7 @@ git commit -m "feat: define job domain model and database location"
 
 **Interfaces:**
 - Consumes: `Job`, database URL.
-- Produces: `JobDatabase.init(url:) throws`, `migrate() throws`, `jobs() throws -> [Job]`, `upsert(_:preservingTracking:) throws`, `setStatus(id:status:at:) throws`, and `summary(limit:) throws -> WidgetSummary`.
+- Produces: `JobDatabase.init(url:mode:) throws`, `migrate() throws`, `jobs() throws -> [Job]`, `upsert(_:preservingTracking:) throws`, `withTransaction(_:) throws`, metadata reads/writes, `setStatus(id:status:at:) throws`, and `summary(limit:) throws -> WidgetSummary`.
 
 - [ ] **Step 1: Write failing CRUD, rollback, and WAL tests**
 
@@ -230,6 +236,21 @@ func testReaderSeesCommittedSnapshotDuringWriterTransaction() throws {
     }
     XCTAssertEqual(try pair.reader.jobs().count, 1)
 }
+
+func testReadOnlyConnectionCannotCreateOrMigrate() throws {
+    let missingURL = TestDatabase.uniqueURL()
+    XCTAssertThrowsError(try JobDatabase(url: missingURL, mode: .readOnly))
+    XCTAssertFalse(FileManager.default.fileExists(atPath: missingURL.path))
+}
+
+func testNestedWriteInsideExplicitTransactionCommitsOnce() throws {
+    let db = try TestDatabase.open()
+    try db.withTransaction {
+        try db.upsert(Job(company: "A", role: "B", location: "C"), preservingTracking: true)
+        try db.setMetadata("value", forKey: "key")
+    }
+    XCTAssertEqual(try db.metadata(forKey: "key"), "value")
+}
 ```
 
 - [ ] **Step 2: Run focused tests and verify failure**
@@ -244,24 +265,31 @@ Expected: FAIL because `JobDatabase` is undefined.
 
 - [ ] **Step 3: Link system SQLite and implement one connection wrapper**
 
-Use `libsqlite3.tbd`; open with `SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX`; immediately execute:
+Use `libsqlite3.tbd`. `.readWrite` opens with `SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX`, enables WAL, and migrates. `.readOnly` opens with `SQLITE_OPEN_READONLY | SQLITE_OPEN_FULLMUTEX`; it never creates files, changes journal mode, or runs schema migration.
+
+The read-write schema is:
 
 ```sql
 PRAGMA journal_mode=WAL;
 PRAGMA foreign_keys=ON;
 PRAGMA busy_timeout=5000;
 CREATE TABLE IF NOT EXISTS schema_version (version INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS jobs (
   id TEXT PRIMARY KEY,
   company TEXT NOT NULL,
   role TEXT NOT NULL,
   location TEXT NOT NULL,
+  priority INTEGER NOT NULL,
+  work_type TEXT,
+  is_full_time INTEGER,
   status TEXT NOT NULL,
   notes TEXT NOT NULL,
   applied_at REAL,
   published_at REAL,
   deadline REAL,
   match_score INTEGER CHECK(match_score BETWEEN 0 AND 100),
+  match_reason TEXT NOT NULL,
   risk TEXT NOT NULL,
   eligibility TEXT NOT NULL,
   canonical_url TEXT,
@@ -272,11 +300,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS jobs_platform_id ON jobs(platform_job_id) WHER
 CREATE UNIQUE INDEX IF NOT EXISTS jobs_canonical_url ON jobs(canonical_url) WHERE canonical_url IS NOT NULL;
 ```
 
-Keep SQL binding and row decoding private in this file. Every write uses prepared statements and `BEGIN IMMEDIATE`/`COMMIT`; errors execute `ROLLBACK` and include the SQLite message.
+Keep SQL binding and row decoding private in this file. Public writes call one transaction helper that starts `BEGIN IMMEDIATE` only when no explicit transaction is active; writes inside `withTransaction` reuse the active transaction. The outermost transaction alone commits or rolls back, and every error includes the SQLite message.
 
 - [ ] **Step 4: Run focused and full tests**
 
-Expected: CRUD, rollback, WAL concurrency, invalid score, and reopening tests pass.
+Expected: CRUD, rollback, WAL concurrency, read-only mode, nested writes, metadata, invalid score, and reopening tests pass.
 
 - [ ] **Step 5: Commit**
 
@@ -323,6 +351,21 @@ func testDuplicateLegacyUUIDDoesNotCrash() throws {
     let result = try LegacyJobMigrator().migrate(legacy: Fixtures.duplicateIDs, agent: [], into: db)
     XCTAssertEqual(result.skippedDuplicates, 1)
 }
+
+func testPlatformIDAndCanonicalURLCollisionUsesOneSurvivor() throws {
+    let db = try TestDatabase.open()
+    try Fixtures.insertCrossKeyCollision(into: db)
+    try LegacyJobMigrator().migrate(legacy: [], agent: [Fixtures.jobMatchingBothRows], into: db)
+    XCTAssertEqual(try db.jobs().count, 1)
+    XCTAssertEqual(try db.jobs().first?.status, .applied)
+}
+
+func testFailedMigrationRollsBackRowsAndMarker() throws {
+    let db = try TestDatabase.open()
+    XCTAssertThrowsError(try LegacyJobMigrator().migrate(legacy: Fixtures.failsMidImport, agent: [], into: db))
+    XCTAssertTrue(try db.jobs().isEmpty)
+    XCTAssertNil(try db.metadata(forKey: "legacy-v1-complete"))
+}
 ```
 
 - [ ] **Step 2: Run focused tests and verify failure**
@@ -331,7 +374,9 @@ Expected: FAIL because `LegacyJobMigrator` is undefined.
 
 - [ ] **Step 3: Implement one-time migration**
 
-Map `applied == true` to `.applied`, otherwise map known legacy strings and default unknown strings to `.new`. Clamp legacy match values to `0...100`. Resolve duplicates in order: platform ID, canonical URL, then UUID; retain the existing database row's status, notes, and applied date. Insert all seed records only when neither legacy defaults nor database rows exist. Mark migration complete in the same transaction.
+Map `applied == true` to `.applied`, otherwise map known legacy strings and default unknown strings to `.new`. Preserve priority, full-time/work type, match score, match reason, status, notes, and URL; clamp legacy match values to `0...100`.
+
+Resolve duplicates inside one transaction in order: platform ID, canonical URL, then UUID. If platform ID and URL match different rows, choose the oldest local row as survivor, copy the strongest local tracking state (`offer`/`interview`/`applied` before pre-application states), keep non-empty notes and applied date, repoint imported source data to the survivor, then delete the alias row. Insert seed records only when neither legacy defaults nor database rows exist. Write `legacy-v1-complete` to the Task 3 metadata table in the same transaction; any row or marker failure rolls back the entire import.
 
 - [ ] **Step 4: Run migration tests twice**
 

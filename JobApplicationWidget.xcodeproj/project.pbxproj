@@ -17,6 +17,7 @@
 		B001 = {isa = PBXBuildFile; fileRef = B101; };
 		B002 = {isa = PBXBuildFile; fileRef = B102; };
 		B003 = {isa = PBXBuildFile; fileRef = B103; };
+		C001 = {isa = PBXBuildFile; fileRef = C101; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,11 +32,14 @@
 		B102 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JobApplicationWidgetExtension-Info.plist; sourceTree = "<group>"; };
 		B103 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/ApplicationModel.swift; sourceTree = "<group>"; };
 		B104 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobApplicationWidgetExtension.entitlements; sourceTree = "<group>"; };
+		C100 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = JobApplicationWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		A200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		B200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		C200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -43,15 +47,18 @@
 		B300 = {isa = PBXGroup; children = (B101, B102, B103, B104); path = JobApplicationWidgetWidget; sourceTree = "<group>"; };
 		A301 = {isa = PBXGroup; children = (A300, B300); sourceTree = "<group>"; };
 		A302 = {isa = PBXGroup; children = (A100, B100); name = Products; sourceTree = "<group>"; };
+		C300 = {isa = PBXGroup; children = (C101); path = JobApplicationWidgetTests; sourceTree = "<group>"; };
+		C301 = {isa = PBXGroup; children = (A300, B300, C300); sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
 		A400 = {isa = PBXNativeTarget; buildConfigurationList = A500; buildPhases = (A600, A200, A601, A602); buildRules = (); dependencies = (A700); name = JobApplicationWidget; productName = JobApplicationWidget; productReference = A100; productType = "com.apple.product-type.application"; };
 		B400 = {isa = PBXNativeTarget; buildConfigurationList = B500; buildPhases = (B600, B200, B601); buildRules = (); dependencies = (); name = JobApplicationWidgetExtension; productName = JobApplicationWidgetExtension; productReference = B100; productType = "com.apple.product-type.app-extension"; };
+		C400 = {isa = PBXNativeTarget; buildConfigurationList = C500; buildPhases = (C600, C200); buildRules = (); dependencies = (C700); name = JobApplicationWidgetTests; productName = JobApplicationWidgetTests; productReference = C100; productType = "com.apple.product-type.bundle.unit-test"; };
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A800 = {isa = PBXProject; attributes = { LastSwiftUpdateCheck = 1620; ORGANIZATIONNAME = Example; TargetAttributes = { A400 = { CreatedOnToolsVersion = 16.2; }; B400 = { CreatedOnToolsVersion = 16.2; }; }; }; buildConfigurationList = A900; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = A301; productRefGroup = A302; projectDirPath = ""; projectRoot = ""; targets = (A400, B400); };
+		A800 = {isa = PBXProject; attributes = { LastSwiftUpdateCheck = 1620; ORGANIZATIONNAME = Example; TargetAttributes = { A400 = { CreatedOnToolsVersion = 16.2; }; B400 = { CreatedOnToolsVersion = 16.2; }; C400 = { CreatedOnToolsVersion = 16.2; TestTargetID = A400; }; }; }; buildConfigurationList = A900; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = C301; productRefGroup = A302; projectDirPath = ""; projectRoot = ""; targets = (A400, B400, C400); };
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -63,26 +70,32 @@
 		A600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A001, A002, A003); runOnlyForDeploymentPostprocessing = 0; };
 		B600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B001, B003); runOnlyForDeploymentPostprocessing = 0; };
 		B601 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
+		C600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C001); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		A700 = {isa = PBXTargetDependency; target = B400; targetProxy = A701; };
 		A701 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = B400; remoteInfo = JobApplicationWidgetExtension; };
+		C700 = {isa = PBXTargetDependency; target = A400; targetProxy = C701; };
+		C701 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = A400; remoteInfo = JobApplicationWidget; };
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		A901 = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Debug; };
 		A902 = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Release; };
-		A903 = {isa = XCBuildConfiguration; buildSettings = { PRODUCT_NAME = JobApplicationWidget; PRODUCT_MODULE_NAME = JobApplicationWidget; PRODUCT_BUNDLE_IDENTIFIER = com.example.JobApplicationWidget; INFOPLIST_FILE = JobApplicationWidget/JobApplicationWidget-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements; }; name = Debug; };
-		A904 = {isa = XCBuildConfiguration; buildSettings = { PRODUCT_NAME = JobApplicationWidget; PRODUCT_MODULE_NAME = JobApplicationWidget; PRODUCT_BUNDLE_IDENTIFIER = com.example.JobApplicationWidget; INFOPLIST_FILE = JobApplicationWidget/JobApplicationWidget-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements; }; name = Release; };
-		B901 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = JobApplicationWidgetExtension; PRODUCT_MODULE_NAME = JobApplicationWidgetExtension; PRODUCT_BUNDLE_IDENTIFIER = com.example.JobApplicationWidget.extension; INFOPLIST_FILE = JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements; }; name = Debug; };
-		B902 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = JobApplicationWidgetExtension; PRODUCT_MODULE_NAME = JobApplicationWidgetExtension; PRODUCT_BUNDLE_IDENTIFIER = com.example.JobApplicationWidget.extension; INFOPLIST_FILE = JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements; }; name = Release; };
+		A903 = {isa = XCBuildConfiguration; buildSettings = { ENABLE_TESTABILITY = YES; PRODUCT_NAME = JobApplicationWidget; PRODUCT_MODULE_NAME = JobApplicationWidget; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot; INFOPLIST_FILE = JobApplicationWidget/JobApplicationWidget-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements; }; name = Debug; };
+		A904 = {isa = XCBuildConfiguration; buildSettings = { PRODUCT_NAME = JobApplicationWidget; PRODUCT_MODULE_NAME = JobApplicationWidget; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot; INFOPLIST_FILE = JobApplicationWidget/JobApplicationWidget-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements; }; name = Release; };
+		B901 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = JobApplicationWidgetExtension; PRODUCT_MODULE_NAME = JobApplicationWidgetExtension; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.extension; INFOPLIST_FILE = JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements; }; name = Debug; };
+		B902 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = JobApplicationWidgetExtension; PRODUCT_MODULE_NAME = JobApplicationWidgetExtension; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.extension; INFOPLIST_FILE = JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements; }; name = Release; };
+		C901 = {isa = XCBuildConfiguration; buildSettings = { BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; GENERATE_INFOPLIST_FILE = YES; PRODUCT_NAME = JobApplicationWidgetTests; PRODUCT_MODULE_NAME = JobApplicationWidgetTests; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.tests; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobApplicationWidget.app/Contents/MacOS/JobApplicationWidget"; }; name = Debug; };
+		C902 = {isa = XCBuildConfiguration; buildSettings = { BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; GENERATE_INFOPLIST_FILE = YES; PRODUCT_NAME = JobApplicationWidgetTests; PRODUCT_MODULE_NAME = JobApplicationWidgetTests; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.tests; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobApplicationWidget.app/Contents/MacOS/JobApplicationWidget"; }; name = Release; };
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
 		A500 = {isa = XCConfigurationList; buildConfigurations = (A903, A904); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 		B500 = {isa = XCConfigurationList; buildConfigurations = (B901, B902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 		A900 = {isa = XCConfigurationList; buildConfigurations = (A901, A902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		C500 = {isa = XCConfigurationList; buildConfigurations = (C901, C902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 /* End XCConfigurationList section */
 	};
 	rootObject = A800;

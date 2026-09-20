@@ -51,7 +51,7 @@ final class ApplicationStore: ObservableObject {
     }
 
     private let key = "jobApplicationWidget.applications.v1"
-    private let defaults = UserDefaults(suiteName: "group.com.example.JobApplicationWidget") ?? .standard
+    private let defaults = UserDefaults(suiteName: "group.com.aobo.JobApplicationCopilot") ?? .standard
     private let agentDatabaseURL = FileManager.default.homeDirectoryForCurrentUser
         .appendingPathComponent("Documents/Codex/2026-07-30/bang/JobApplicationWidget/data/jobs.json")
 
