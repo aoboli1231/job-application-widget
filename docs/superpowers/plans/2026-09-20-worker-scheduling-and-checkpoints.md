@@ -272,7 +272,7 @@ git commit -m "feat: add worker paths and run lock"
 - Consumes: `NWPathMonitor` satisfied/unsatisfied events, sleep/wake events from Task 4, a clock, and an HTTPS requester.
 - Produces: `NetworkGateEvent`, `NetworkStabilityState`, `NetworkStabilityMachine.handle(_:now:)`, and production `NetworkGate.waitUntilUsable() async throws` / `reset()` / `cancel()`.
 
-- [ ] **Step 1: Write failing pure state-machine tests**
+- [x] **Step 1: Write failing pure state-machine tests**
 
 ```swift
 func testPathDropAtSecondFiftyNineRestartsFullWindow() {
@@ -292,7 +292,7 @@ func testSleepAndWakeResetSatisfiedPath() {
 }
 ```
 
-- [ ] **Step 2: Run focused tests and verify failure**
+- [x] **Step 2: Run focused tests and verify failure**
 
 Run:
 
@@ -304,11 +304,11 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: FAIL because the gate types do not exist.
 
-- [ ] **Step 3: Implement the pure state machine and one-shot timer adapter**
+- [x] **Step 3: Implement the pure state machine and one-shot timer adapter**
 
 The state machine has only `offline`, `stabilizing(deadline)`, `probing`, and `ready`. Repeated satisfied events while stabilizing do not extend the deadline. Unsatisfied, sleep, and explicit reset cancel the current one-shot `DispatchSourceTimer` and any probes. The runtime adapter starts one `NWPathMonitor` on a serial queue; it never schedules repeating timers.
 
-- [ ] **Step 4: Add two sequential HTTPS probes**
+- [x] **Step 4: Add two sequential HTTPS probes**
 
 Define the narrow seam:
 
@@ -326,7 +326,7 @@ struct ProbePolicy {
 
 Production uses ephemeral `URLSessionConfiguration`, `waitsForConnectivity = false`, a 10-second request/resource timeout, no credentials, and a GET whose body is discarded. Use the same two fixed, documented endpoints in tests through a fake requester; never probe email, SQLite business content, Chrome, or Codex.
 
-- [ ] **Step 5: Test probe failures and cancellation**
+- [x] **Step 5: Test probe failures and cancellation**
 
 ```swift
 func testTwoSuccessfulProbesProduceReadyOnce() async throws { /* assert exactly two calls and one ready */ }
@@ -336,7 +336,7 @@ func testPathLossDuringSecondProbeCancelsAndRequiresSixtySecondsAgain() async th
 
 Also assert `NWPathMonitor.start` is called once, timers are one-shot, and `cancel()` resumes any awaiting continuation exactly once with cancellation.
 
-- [ ] **Step 6: Run focused tests ten times and commit**
+- [x] **Step 6: Run focused tests ten times and commit**
 
 Run the command from Step 2 with `-test-iterations 10`.
 
