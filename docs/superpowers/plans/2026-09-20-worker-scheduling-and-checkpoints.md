@@ -216,7 +216,7 @@ git commit -m "feat: persist worker runs and checkpoints"
 - Consumes: an App Group container URL from `DatabaseLocation`.
 - Produces: `WorkerPaths.init(containerURL:)`, `lockURL`, `backupDirectoryURL`, `launchAgentPlistURL`, and `WorkerLock.acquire(url:) throws -> WorkerLock?`.
 
-- [ ] **Step 1: Write failing path and exclusion tests**
+- [x] **Step 1: Write failing path and exclusion tests**
 
 ```swift
 func testPathsStayInsideInjectedContainer() {
@@ -235,25 +235,25 @@ func testOnlyOneHandleCanOwnWorkerLock() throws {
 }
 ```
 
-- [ ] **Step 2: Run tests and verify missing types fail compilation**
+- [x] **Step 2: Run tests and verify missing types fail compilation**
 
 Run the full test command from Task 1.
 
 Expected: FAIL because `WorkerPaths` and `WorkerLock` do not exist.
 
-- [ ] **Step 3: Implement the minimum lock wrapper**
+- [x] **Step 3: Implement the minimum lock wrapper**
 
 Use `open(path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)` and `flock(fd, LOCK_EX | LOCK_NB)`. Return `nil` only for `EWOULDBLOCK`; throw an error containing `errno` and the path for every other failure. Hold the descriptor for the wrapper lifetime, and make `unlock()` idempotently call `flock(fd, LOCK_UN)` and `close(fd)`.
 
 Do not put the lock in `/tmp`, the repository, or a hard-coded home directory. Production constructs all paths from `DatabaseLocation().databaseURL().deletingLastPathComponent()` or the resolved App Group container.
 
-- [ ] **Step 4: Run lock tests, including concurrent acquisition**
+- [x] **Step 4: Run lock tests, including concurrent acquisition**
 
 Add a test that starts 20 concurrent acquisition attempts behind a barrier and asserts exactly one non-nil owner. Release all successful handles at the end of the test.
 
 Expected: PASS under repeated execution (`-test-iterations 10`).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Shared/WorkerPaths.swift Shared/WorkerLock.swift \
