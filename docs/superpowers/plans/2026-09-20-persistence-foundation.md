@@ -210,7 +210,7 @@ git commit -m "feat: define job domain model and database location"
 - Consumes: `Job`, database URL.
 - Produces: `JobDatabase.init(url:mode:) throws`, `migrate() throws`, `jobs() throws -> [Job]`, `upsert(_:preservingTracking:) throws`, `withTransaction(_:) throws`, metadata reads/writes, `setStatus(id:status:at:) throws`, and `summary(limit:) throws -> WidgetSummary`.
 
-- [ ] **Step 1: Write failing CRUD, rollback, and WAL tests**
+- [x] **Step 1: Write failing CRUD, rollback, and WAL tests**
 
 ```swift
 func testUpsertRoundTripsJob() throws {
@@ -253,7 +253,7 @@ func testNestedWriteInsideExplicitTransactionCommitsOnce() throws {
 }
 ```
 
-- [ ] **Step 2: Run focused tests and verify failure**
+- [x] **Step 2: Run focused tests and verify failure**
 
 Run:
 
@@ -263,7 +263,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: FAIL because `JobDatabase` is undefined.
 
-- [ ] **Step 3: Link system SQLite and implement one connection wrapper**
+- [x] **Step 3: Link system SQLite and implement one connection wrapper**
 
 Use `libsqlite3.tbd`. `.readWrite` opens with `SQLITE_OPEN_CREATE | SQLITE_OPEN_READWRITE | SQLITE_OPEN_FULLMUTEX`, enables WAL, and migrates. `.readOnly` opens with `SQLITE_OPEN_READONLY | SQLITE_OPEN_FULLMUTEX`; it never creates files, changes journal mode, or runs schema migration.
 
@@ -302,11 +302,11 @@ CREATE UNIQUE INDEX IF NOT EXISTS jobs_canonical_url ON jobs(canonical_url) WHER
 
 Keep SQL binding and row decoding private in this file. Public writes call one transaction helper that starts `BEGIN IMMEDIATE` only when no explicit transaction is active; writes inside `withTransaction` reuse the active transaction. The outermost transaction alone commits or rolls back, and every error includes the SQLite message.
 
-- [ ] **Step 4: Run focused and full tests**
+- [x] **Step 4: Run focused and full tests**
 
 Expected: CRUD, rollback, WAL concurrency, read-only mode, nested writes, metadata, invalid score, and reopening tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Shared/JobDatabase.swift JobApplicationWidget.xcodeproj JobApplicationWidgetTests
