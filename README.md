@@ -1,69 +1,60 @@
 # Job Application Widget
 
-A native macOS SwiftUI menu-bar popover and WidgetKit extension for tracking job applications.
+A native macOS menu-bar app and WidgetKit extension for tracking job applications.
 
-## Current status
+## Current foundation
 
-This is an early work-in-progress prototype. The core checklist and dashboard are usable, but the project is not yet production-ready.
+- SQLite is the authoritative runtime data store.
+- The app owns migrations and writes; the Widget opens the same database read-only.
+- The existing nine prototype jobs are imported once when no earlier data exists.
+- Legacy `UserDefaults` tracking state is migrated without overwriting status, notes, or application dates.
+- The shared container is the App Group `group.com.aobo.JobApplicationCopilot`.
 
-Implemented:
+JSON is not a live second database. It may be used later as an explicit one-time import or backup format, but the app and Widget do not poll `data/jobs.json` or a repository path.
 
-- menu-bar popover and Dock-launchable macOS app
-- WidgetKit extension with shared application state
-- application checklist with persistent applied/status/notes state
-- match percentage, full-time filter, priorities and dashboard summaries
-- direct JD links opened in Google Chrome when a valid URL is stored
-- one-click Codex task, resume and cover-letter shortcuts
-- local JSON hand-off point for Codex job-search agents
-- add-job form, hover feedback, adaptive layout and quit action
+Outlook ingestion, SEEK/Indeed/LinkedIn search, scam analysis, match scoring, tailored PDF generation, scheduling, and network-stability monitoring are later increments and are not implemented in this foundation.
 
-Planned:
+## Build and test
 
-- recurring Codex automation for job searches
-- robust import/export and conflict handling for `jobs.json`
-- editable application status, notes and follow-up dates
-- configurable paths and Codex task identifiers
-- tests, accessibility review, signing and distribution packaging
+Open `JobApplicationWidget.xcodeproj` in Xcode 16 or later. The project targets macOS 13+.
 
-## Build locally
-
-Open `JobApplicationWidget.xcodeproj` in Xcode 16 or later and build the `JobApplicationWidget` scheme for macOS. The project targets macOS 13+.
-
-For an unsigned local Intel build:
+Unsigned local build:
 
 ```sh
 xcodebuild -project JobApplicationWidget.xcodeproj \
   -scheme JobApplicationWidget \
   -configuration Debug \
   -sdk macosx \
-  -arch x86_64 \
   -derivedDataPath .build \
   CODE_SIGNING_ALLOWED=NO build
 ```
 
-## Codex agent data contract
+Tests:
 
-The agent hand-off file is `data/jobs.json`. It contains a JSON array matching `JobApplication` in `Shared/ApplicationModel.swift`.
+```sh
+xcodebuild -project JobApplicationWidget.xcodeproj \
+  -scheme JobApplicationWidget \
+  -destination 'platform=macOS' \
+  -derivedDataPath .build \
+  CODE_SIGNING_ALLOWED=NO test
+```
 
-An agent should:
+Unsigned builds verify compilation and tests, but a real Apple development team and matching App Group entitlement are required to validate the shared production container between the app and Widget.
 
-1. Search current Melbourne/Australia junior, graduate, analyst, AI and ML roles.
-2. Keep roles with a match score of at least 80%, prioritising full-time roles and larger employers.
-3. Store the original SEEK, Workday, company or other source URL in `jdURL`; do not fabricate URLs or use a Google search URL.
-4. Preserve an existing role's `id` when refreshing it.
-5. Never overwrite locally tracked `applied`, `status` or `notes` values.
-6. Explain the fit in `matchReason` and sort records by `priority`.
+## Data location and migration
 
-Suggested instruction for a new Codex agent:
+`DatabaseLocation` resolves the App Group container and stores the database at:
 
-> Read the repository README and update `data/jobs.json`. Search current Melbourne/Australia full-time junior/graduate data, analytics, AI and ML roles. Rank against the user's resume, keep match scores of 80%+, include the original valid job URL, preserve existing application state, and do not invent listings or links.
+```text
+Library/Application Support/JobApplicationCopilot/jobs.sqlite3
+```
 
-Use the app's **Sync agent updates** action after the agent writes the file.
+There is deliberately no fallback to `UserDefaults.standard`, a temporary database, the user's home directory, or a hard-coded repository path. If the App Group or database cannot be opened, the app displays the error and the Widget returns an empty safe entry.
 
-## Privacy and security
+## Privacy
 
-This repository contains no resume, email export, credentials, access tokens or mailbox data. User-specific job data should stay in the local JSON file or a private repository. Do not commit generated Xcode user data, build products or personal absolute paths.
+Do not commit resumes, generated application documents, mailbox exports, credentials, access tokens, or personal application data. The SQLite database lives outside the repository in the private App Group container.
 
 ## License
 
-No license has been selected yet. Treat this repository as all-rights-reserved until a license is added.
+No license has been selected. Treat this repository as all-rights-reserved until a license is added.

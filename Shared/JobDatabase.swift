@@ -211,6 +211,11 @@ final class JobDatabase {
     }
 
     private func bindAndUpsert(_ job: Job, preservingTracking: Bool) throws {
+        if let url = job.canonicalURL {
+            guard let scheme = url.scheme?.lowercased(), ["http", "https"].contains(scheme) else {
+                throw Error.invalidData("Invalid jobs.canonical_url: \(url.absoluteString)")
+            }
+        }
         let trackingUpdate = preservingTracking ? "" : """
             status = excluded.status,
             notes = excluded.notes,
@@ -295,7 +300,9 @@ final class JobDatabase {
         job.risk = risk
         job.eligibility = eligibility
         if let urlText = try optionalText(statement, 16, "jobs.canonical_url") {
-            guard let url = URL(string: urlText), url.scheme != nil else {
+            guard let url = URL(string: urlText),
+                  let scheme = url.scheme?.lowercased(),
+                  ["http", "https"].contains(scheme) else {
                 throw Error.invalidData("Invalid jobs.canonical_url: \(urlText)")
             }
             job.canonicalURL = url

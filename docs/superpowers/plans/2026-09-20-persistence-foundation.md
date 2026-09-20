@@ -403,7 +403,7 @@ git commit -m "feat: migrate legacy application tracking to SQLite"
 - Consumes: `JobDatabase`, `Job`, `WidgetSummary`.
 - Produces: `ApplicationStore.reload()`, `ApplicationStore.setStatus(_:for:)`, and read-only Widget timeline entries.
 
-- [ ] **Step 1: Write failing store behavior tests**
+- [x] **Step 1: Write failing store behavior tests**
 
 ```swift
 @MainActor
@@ -424,19 +424,19 @@ func testDatabaseFailureIsExposedToUI() {
 }
 ```
 
-- [ ] **Step 2: Run store tests and verify failure**
+- [x] **Step 2: Run store tests and verify failure**
 
 Expected: FAIL because the new injected-database initializer and typed status API do not exist.
 
-- [ ] **Step 3: Replace implicit prototype storage with the injected store**
+- [x] **Step 3: Replace implicit prototype storage with the injected store**
 
 `ApplicationStore` loads once from `JobDatabase`, publishes `[Job]`, writes explicit user actions, and surfaces errors. Remove the hard-coded repository path and `UserDefaults.standard` fallback. `JobApplicationWidgetApp` constructs the database once and injects the store into the view.
 
-- [ ] **Step 4: Make the Widget query only its summary**
+- [x] **Step 4: Make the Widget query only its summary**
 
 The provider opens the shared database read-only, calls `summary(limit: 3)`, and returns an empty/error-safe entry if the container is unavailable. It does not fall back to hard-coded sample jobs outside preview mode. Use `.after(.now.addingTimeInterval(3600))`; the future Worker phase will explicitly reload Widget timelines after database writes.
 
-- [ ] **Step 5: Build, test, and manually launch**
+- [x] **Step 5: Build, test, and manually launch**
 
 Run:
 
@@ -447,11 +447,11 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 Expected: all tests pass; unsigned app and extension build; the app shows migrated jobs and changing Westpac's status persists across relaunch.
 
-- [ ] **Step 6: Update the README data contract**
+- [x] **Step 6: Update the README data contract**
 
 Document SQLite as authoritative, JSON as import/backup only, the App Group requirement, unsigned build command, and the fact that Outlook/search/AI are not part of this foundation increment.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add JobApplicationWidget Shared JobApplicationWidgetWidget JobApplicationWidgetTests README.md

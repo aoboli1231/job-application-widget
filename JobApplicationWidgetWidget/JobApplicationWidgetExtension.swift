@@ -4,27 +4,41 @@ import SwiftUI
 struct ApplicationEntry: TimelineEntry {
     let date: Date
     let openCount: Int
-    let topApplications: [JobApplication]
+    let topApplications: [Job]
 }
 
 struct ApplicationProvider: TimelineProvider {
     func placeholder(in context: Context) -> ApplicationEntry {
-        ApplicationEntry(date: .now, openCount: 6, topApplications: initialApplications.prefix(3).map { $0 })
+        ApplicationEntry(
+            date: .now,
+            openCount: 1,
+            topApplications: [Job(company: "Example", role: "Data Analyst", location: "Melbourne")]
+        )
     }
 
     func getSnapshot(in context: Context, completion: @escaping (ApplicationEntry) -> Void) {
-        completion(makeEntry())
+        completion(context.isPreview ? placeholder(in: context) : makeEntry())
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<ApplicationEntry>) -> Void) {
-        completion(Timeline(entries: [makeEntry()], policy: .after(.now.addingTimeInterval(900))))
+        completion(Timeline(entries: [makeEntry()], policy: .after(.now.addingTimeInterval(3600))))
     }
 
     private func makeEntry() -> ApplicationEntry {
-        let defaults = UserDefaults(suiteName: "group.com.aobo.JobApplicationCopilot") ?? .standard
-        let applications = (defaults.data(forKey: "jobApplicationWidget.applications.v1")
-            .flatMap { try? JSONDecoder().decode([JobApplication].self, from: $0) }) ?? initialApplications
-        return ApplicationEntry(date: .now, openCount: applications.filter { !$0.applied }.count, topApplications: Array(applications.prefix(3)))
+        do {
+            let database = try JobDatabase(
+                url: DatabaseLocation().databaseURL(),
+                mode: .readOnly
+            )
+            let summary = try database.summary(limit: 3)
+            return ApplicationEntry(
+                date: summary.refreshedAt ?? .now,
+                openCount: summary.openCount,
+                topApplications: summary.topJobs
+            )
+        } catch {
+            return ApplicationEntry(date: .now, openCount: 0, topApplications: [])
+        }
     }
 }
 
