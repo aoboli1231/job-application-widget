@@ -143,6 +143,12 @@ final class NetworkLease {
         return waiter != nil
     }
 
+    var isInvalidated: Bool {
+        lock.lock()
+        defer { lock.unlock() }
+        return invalidated
+    }
+
     func waitForInvalidation() async throws {
         let waiterID = UUID()
         try await withTaskCancellationHandler {
@@ -244,7 +250,8 @@ final class NetworkGate: NetworkGating {
     private var machine: NetworkStabilityMachine
     private var timer: NetworkGateCancellation?
     private var probeTask: Task<Void, Never>?
-    private var waiter: CheckedContinuation<NetworkLease, Swift.Error>?
+    private var waiter: (id: UUID, continuation: CheckedContinuation<NetworkLease, Swift.Error>)?
+    private var cancelledWaiterIDs: Set<UUID> = []
     private var currentLease: NetworkLease?
     private var monitorStarted = false
     private var lastPathSatisfied = false
@@ -294,15 +301,20 @@ final class NetworkGate: NetworkGating {
         probeTask?.cancel()
         monitor.cancel()
         monitor.updateHandler = nil
-        waiter?.resume(throwing: CancellationError())
+        waiter?.continuation.resume(throwing: CancellationError())
         currentLease?.invalidate()
     }
 
     func waitUntilUsable() async throws -> NetworkLease {
-        try await withTaskCancellationHandler {
+        let waiterID = UUID()
+        return try await withTaskCancellationHandler {
             try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<NetworkLease, Swift.Error>) in
                 queue.async {
                     guard !self.terminated else {
+                        continuation.resume(throwing: CancellationError())
+                        return
+                    }
+                    if self.cancelledWaiterIDs.remove(waiterID) != nil {
                         continuation.resume(throwing: CancellationError())
                         return
                     }
@@ -316,7 +328,7 @@ final class NetworkGate: NetworkGating {
                         continuation.resume(returning: lease)
                         return
                     }
-                    self.waiter = continuation
+                    self.waiter = (waiterID, continuation)
                     if !self.monitorStarted {
                         self.monitorStarted = true
                         self.monitor.start(queue: self.queue)
@@ -326,7 +338,7 @@ final class NetworkGate: NetworkGating {
                 }
             }
         } onCancel: {
-            self.cancel()
+            self.cancelWaiter(id: waiterID)
         }
     }
 
@@ -345,7 +357,7 @@ final class NetworkGate: NetworkGating {
             self.waiter = nil
             self.currentLease?.invalidate()
             self.currentLease = nil
-            waiter?.resume(throwing: CancellationError())
+            waiter?.continuation.resume(throwing: CancellationError())
         }
     }
 
@@ -385,7 +397,7 @@ final class NetworkGate: NetworkGating {
             self.waiter = nil
             let lease = NetworkLease()
             currentLease = lease
-            waiter?.resume(returning: lease)
+            waiter?.continuation.resume(returning: lease)
         case .none, .awaitPathEvent:
             break
         }
@@ -396,7 +408,7 @@ final class NetworkGate: NetworkGating {
             apply(.probesFailed)
             let waiter = waiter
             self.waiter = nil
-            waiter?.resume(throwing: Error.invalidProbePolicy)
+            waiter?.continuation.resume(throwing: Error.invalidProbePolicy)
             return
         }
 
@@ -432,5 +444,16 @@ final class NetworkGate: NetworkGating {
 
     private func cancelTimer() { timer?.cancel(); timer = nil }
     private func cancelOwnedWork() { cancelTimer(); probeTask?.cancel(); probeTask = nil }
+    private func cancelWaiter(id: UUID) {
+        queue.async {
+            if self.waiter?.id == id {
+                let continuation = self.waiter?.continuation
+                self.waiter = nil
+                continuation?.resume(throwing: CancellationError())
+            } else if !self.terminated {
+                self.cancelledWaiterIDs.insert(id)
+            }
+        }
+    }
     private enum ProbeFailure: Swift.Error { case rejectedStatus }
 }

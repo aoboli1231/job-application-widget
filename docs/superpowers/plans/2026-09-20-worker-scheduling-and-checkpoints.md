@@ -417,7 +417,7 @@ git commit -m "feat: stop worker resources for sleep"
 
 `NetworkGate.waitUntilUsable()` returns a memory-backed `NetworkLease`; its `waitForInvalidation()` completes on path loss, reset, or cancellation even when invalidation happened before the listener registered. This reuses the gate's single monitor and closes the ready-to-listener race. Inject `SuccessfulRunBackupWriting` without a production no-op; Task 6 supplies its real implementation. Create a fresh one-shot `WorkerResources` for every performer attempt and keep one power-event subscription for the whole coordinator run.
 
-- [ ] **Step 1: Define the minimum performer seam and write failing due/force tests**
+- [x] **Step 1: Define the minimum performer seam and write failing due/force tests**
 
 ```swift
 protocol WorkerPerforming {
@@ -436,7 +436,7 @@ func testForceDoesNotBypassOfflineGate() async throws { /* performer remains unc
 
 `WorkerCheckpoint` contains only `stage: String` and validated JSON `payload: Data`; future ingestion plans own the stage vocabulary.
 
-- [ ] **Step 2: Run focused tests and verify failure**
+- [x] **Step 2: Run focused tests and verify failure**
 
 Run:
 
@@ -446,7 +446,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
   -only-testing:JobApplicationWidgetTests/WorkerCoordinatorTests test
 ```
 
-- [ ] **Step 3: Implement coordinator ordering exactly once**
+- [x] **Step 3: Implement coordinator ordering exactly once**
 
 `run(trigger:force:)` performs this order:
 
@@ -463,7 +463,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget 
 
 The coordinator never sleeps until 08:00. Before 08:00 it exits; the calendar launch is responsible for the next start.
 
-- [ ] **Step 4: Implement sleep/network interruption ordering**
+- [x] **Step 4: Implement sleep/network interruption ordering**
 
 On `.willSleep` or path loss while probing/running:
 
@@ -475,7 +475,7 @@ On `.willSleep` or path loss while probing/running:
 
 Do not create a second run row on resume. Do not mark a suspended run failed merely because the Mac sleeps.
 
-- [ ] **Step 5: Add interruption, race, and exactly-once tests**
+- [x] **Step 5: Add interruption, race, and exactly-once tests**
 
 ```swift
 func testSleepCheckpointsBeforeResourcesAreCancelled() async throws { /* ordered event recorder */ }
@@ -485,7 +485,7 @@ func testManualAndScheduledRaceCreatesOneRun() async throws { /* two coordinator
 func testStableNetworkLaunchesPerformerOnlyOnce() async throws { /* repeated satisfied events */ }
 ```
 
-- [ ] **Step 6: Run coordinator tests repeatedly and commit**
+- [x] **Step 6: Run coordinator tests repeatedly and commit**
 
 Run Step 2 with `-test-iterations 10`, then the full suite.
 

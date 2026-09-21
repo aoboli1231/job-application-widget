@@ -84,6 +84,42 @@ final class NetworkGateTests: XCTestCase {
         XCTAssertTrue(first === second)
     }
 
+    func testAlreadyCancelledTaskCannotReceiveReadyLease() async throws {
+        let started = expectation(description: "monitor started")
+        let armed = expectation(description: "timer armed")
+        let entered = expectation(description: "cancelled task entered")
+        let monitor = FakePathMonitor(onStart: { started.fulfill() })
+        let timers = FakeTimerScheduler(onSchedule: { armed.fulfill() })
+        let requester = ScriptedRequester(results: [.success(204), .success(204)])
+        var now: TimeInterval = 0
+        let gate = makeGate(monitor, timers, requester, now: { now })
+        let ready = Task { try await gate.waitUntilUsable() }
+        await fulfillment(of: [started])
+        monitor.emit(satisfied: true)
+        await fulfillment(of: [armed])
+        now = 60
+        timers.fireLatest()
+        _ = try await ready.value
+
+        let latch = AsyncLatch()
+        let cancelled = Task {
+            entered.fulfill()
+            await latch.wait()
+            return try await gate.waitUntilUsable()
+        }
+        await fulfillment(of: [entered])
+        cancelled.cancel()
+        await latch.open()
+
+        do {
+            _ = try await cancelled.value
+            XCTFail("An already-cancelled waiter received the ready lease")
+        } catch is CancellationError {
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
     func testPathDropAtSecondFiftyNineRestartsFullWindow() {
         var machine = NetworkStabilityMachine(stableInterval: 60)
         XCTAssertEqual(machine.handle(.pathSatisfied, now: 0), .arm(deadline: 60))
@@ -378,11 +414,19 @@ final class NetworkGateTests: XCTestCase {
         XCTAssertEqual(requester.callCount, 0)
     }
 
-    func testCancellingWaitingTaskCancelsGateExactlyOnce() async {
+    func testCancellingReadinessWaiterLeavesGateReusable() async throws {
         let started = expectation(description: "monitor started")
         let cancelled = expectation(description: "task cancelled")
-        let monitor = FakePathMonitor(onStart: { started.fulfill() })
-        let gate = makeGate(monitor, FakeTimerScheduler(), ScriptedRequester(results: []), now: { 0 })
+        let armed = expectation(description: "timer armed")
+        let monitorCancelled = expectation(description: "monitor cancelled")
+        let monitor = FakePathMonitor(
+            onStart: { started.fulfill() },
+            onCancel: { monitorCancelled.fulfill() }
+        )
+        let timers = FakeTimerScheduler(onSchedule: { armed.fulfill() })
+        let requester = ScriptedRequester(results: [.success(204), .success(204)])
+        var now: TimeInterval = 0
+        let gate = makeGate(monitor, timers, requester, now: { now })
         let task = Task {
             do { try await gate.waitUntilUsable() }
             catch is CancellationError { cancelled.fulfill() }
@@ -392,7 +436,18 @@ final class NetworkGateTests: XCTestCase {
         await fulfillment(of: [started])
         task.cancel()
         await fulfillment(of: [cancelled])
+
+        let second = Task { try await gate.waitUntilUsable() }
+        monitor.emit(satisfied: true)
+        await fulfillment(of: [armed])
+        now = 60
+        timers.fireLatest()
+        _ = try await second.value
+
+        XCTAssertEqual(monitor.startCount, 1)
+        XCTAssertEqual(monitor.cancelCount, 0)
         gate.cancel()
+        await fulfillment(of: [monitorCancelled])
         XCTAssertEqual(monitor.cancelCount, 1)
     }
 
@@ -414,15 +469,38 @@ final class NetworkGateTests: XCTestCase {
     }
 }
 
+private actor AsyncLatch {
+    private var opened = false
+    private var continuation: CheckedContinuation<Void, Never>?
+
+    func wait() async {
+        if opened { return }
+        await withCheckedContinuation { continuation = $0 }
+    }
+
+    func open() {
+        opened = true
+        continuation?.resume()
+        continuation = nil
+    }
+}
+
 private final class FakePathMonitor: NetworkPathMonitoring {
     var updateHandler: ((Bool) -> Void)?
     private let onStart: () -> Void
+    private let onCancel: () -> Void
     private(set) var startCount = 0
     private(set) var cancelCount = 0
 
-    init(onStart: @escaping () -> Void = {}) { self.onStart = onStart }
+    init(onStart: @escaping () -> Void = {}, onCancel: @escaping () -> Void = {}) {
+        self.onStart = onStart
+        self.onCancel = onCancel
+    }
     func start(queue: DispatchQueue) { startCount += 1; onStart() }
-    func cancel() { cancelCount += 1 }
+    func cancel() {
+        cancelCount += 1
+        if cancelCount == 1 { onCancel() }
+    }
     func emit(satisfied: Bool) { updateHandler?(satisfied) }
 }
 
