@@ -43,6 +43,7 @@ final class WorkerCoordinator {
     private let backup: SuccessfulRunBackupWriting
     private let resourcesFactory: () -> WorkerResources
     private let now: () -> Date
+    private let onTransition: (String) -> Void
 
     init(
         database: JobDatabase,
@@ -54,6 +55,7 @@ final class WorkerCoordinator {
         backup: SuccessfulRunBackupWriting,
         resourcesFactory: @escaping () -> WorkerResources = { WorkerResources() },
         now: @escaping () -> Date = Date.init,
+        onTransition: @escaping (String) -> Void = { _ in },
         acquireLock: (() throws -> WorkerLock?)? = nil
     ) {
         self.database = database
@@ -65,27 +67,36 @@ final class WorkerCoordinator {
         self.backup = backup
         self.resourcesFactory = resourcesFactory
         self.now = now
+        self.onTransition = onTransition
     }
 
     func run(trigger: RunTrigger, force: Bool = false) async -> WorkerExit {
         let startedAt = now()
         let localDay = schedule.localDay(at: startedAt)
-        if !force, !schedule.isDue(at: startedAt) { return .skippedNotDue }
+        if !force, !schedule.isDue(at: startedAt) {
+            onTransition("skipped_not_due")
+            return .skippedNotDue
+        }
         do {
             if !force, try database.hasSuccessfulRun(localDay: localDay) {
+                onTransition("skipped_already_succeeded")
                 return .skippedAlreadySucceeded
             }
         } catch { return .failed(Self.message(error)) }
 
         let workerLock: WorkerLock
         do {
-            guard let lock = try acquireLock() else { return .alreadyRunning }
+            guard let lock = try acquireLock() else {
+                onTransition("already_running")
+                return .alreadyRunning
+            }
             workerLock = lock
         } catch { return .failed(Self.message(error)) }
         defer { workerLock.unlock() }
 
         do {
             if !force, try database.hasSuccessfulRun(localDay: localDay) {
+                onTransition("skipped_already_succeeded")
                 return .skippedAlreadySucceeded
             }
             let existing = try database.latestResumableRun(localDay: localDay)
@@ -113,9 +124,11 @@ final class WorkerCoordinator {
         while !Task.isCancelled {
             do {
                 if await inbox.isAsleep { try await inbox.waitUntilWake() }
+                onTransition("waiting_for_network")
                 switch try await waitForReadinessOrSleep(inbox: inbox) {
                 case let .ready(lease):
                     try database.setRunStatus(id: runID, status: .running, at: now())
+                    onTransition("running")
                     let resources = resourcesFactory()
                     let state = AttemptState(database: database, runID: runID, checkpoint: checkpoint, now: now)
                     let outcome = await raceAttempt(lease: lease, inbox: inbox, resources: resources, state: state)
@@ -126,11 +139,13 @@ final class WorkerCoordinator {
                         do {
                             _ = try backup.writeSuccessfulBackup(database: database, runID: runID, at: now())
                             try database.finishRun(id: runID, status: .succeeded, error: nil, at: now())
+                            onTransition("succeeded")
                             return .succeeded
                         } catch { return finishFailed(runID: runID, error: error) }
                     case let .failed(message):
                         return finishFailed(runID: runID, message: message)
                     case .interrupted:
+                        onTransition("suspended")
                         gate.reset()
                         if await inbox.isAsleep { try await inbox.waitUntilWake() }
                     case .lost:
@@ -138,6 +153,7 @@ final class WorkerCoordinator {
                     }
                 case .sleep:
                     try database.setRunStatus(id: runID, status: .suspended, at: now())
+                    onTransition("suspended")
                     gate.reset()
                     try await inbox.waitUntilWake()
                 }
@@ -221,8 +237,10 @@ final class WorkerCoordinator {
     private func finishFailed(runID: UUID, message: String) -> WorkerExit {
         do {
             try database.finishRun(id: runID, status: .failed, error: message, at: now())
+            onTransition("failed")
             return .failed(message)
         } catch {
+            onTransition("failed")
             return .failed("\(message); could not persist failure: \(Self.message(error))")
         }
     }

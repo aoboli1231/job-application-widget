@@ -566,7 +566,7 @@ git commit -m "feat: export rolling JSON backups"
 - Consumes: production implementations from Tasks 1–6 and an absolute bundled worker executable URL.
 - Produces: executable arguments `--scheduled` and `--force`, `LaunchAgentInstaller.install(workerURL:)`, and label `com.aobo.JobApplicationCopilot.worker`.
 
-- [ ] **Step 1: Write failing command and plist tests**
+- [x] **Step 1: Write failing command and plist tests**
 
 ```swift
 func testLaunchAgentHasOnlyLoginAndEightAMTriggers() throws {
@@ -584,17 +584,17 @@ func testForceArgumentMapsOnlyToManualForceTrigger() throws {
 }
 ```
 
-- [ ] **Step 2: Run tests and verify missing types fail compilation**
+- [x] **Step 2: Run tests and verify missing types fail compilation**
 
 Run the full suite.
 
-- [ ] **Step 3: Add the command-line target and production composition root**
+- [x] **Step 3: Add the command-line target and production composition root**
 
 Add a macOS command-line target named `JobScoutWorker`, bundle identifier `com.aobo.JobApplicationCopilot.worker`, deployment target 13.0, SQLite3 linkage, Network/AppKit frameworks, and the App Group entitlement. Include only the shared model/database/worker files needed by the executable; do not include SwiftUI views, the Widget provider, or legacy migration.
 
 `main.swift` parses exactly one mode, resolves the App Group location, builds the lock/gate/power/coordinator/backup dependencies, runs the coordinator, logs one structured line per state transition with `Logger`, and exits nonzero only for actionable failure. The production performer for this increment saves a `foundation-backup` checkpoint and performs no email, Chrome, Codex, or ingestion work.
 
-- [ ] **Step 4: Generate and install the LaunchAgent without polling keys**
+- [x] **Step 4: Generate and install the LaunchAgent without polling keys**
 
 `LaunchAgentInstaller` serializes a plist containing:
 
@@ -609,11 +609,11 @@ Add a macOS command-line target named `JobScoutWorker`, bundle identifier `com.a
 
 Write atomically to `FileManager.default.urls(for: .libraryDirectory, in: .userDomainMask)[0]/LaunchAgents/com.aobo.JobApplicationCopilot.worker.plist`. Use `/bin/launchctl bootstrap gui/<uid> <plist>` on first install and `kickstart` only for an explicit user Fetch—not as a periodic retry. If an installed plist differs, boot it out, atomically replace it, and bootstrap the new file. Surface command stderr and exit status; never silently claim scheduling is enabled.
 
-- [ ] **Step 5: Add plist safety and install failure tests**
+- [x] **Step 5: Add plist safety and install failure tests**
 
 Test exact ProgramArguments, XML round-trip, file mode `0600`, absence of `StartInterval`/`KeepAlive`/wake keys, atomic replacement, and surfaced nonzero `launchctl` status through an injected command runner.
 
-- [ ] **Step 6: Build and smoke-test the worker**
+- [x] **Step 6: Build and smoke-test the worker**
 
 Run:
 
@@ -624,7 +624,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobScoutWorker \
 
 Then invoke the built executable with an invalid argument and assert a concise usage error and nonzero exit. Do not run `--scheduled` against the real App Group in automated tests.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add JobScoutWorker Shared/LaunchAgentInstaller.swift \

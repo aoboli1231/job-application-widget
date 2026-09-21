@@ -15,8 +15,12 @@ struct DatabaseLocation {
         self.containerURLProvider = containerURLProvider
     }
 
-    func databaseURL() throws -> URL {
+    func containerURL() throws -> URL {
         guard let container = containerURLProvider() else { throw Error.appGroupUnavailable(appGroupID) }
-        return container.appendingPathComponent("Library/Application Support/JobApplicationCopilot/jobs.sqlite3")
+        return container
+    }
+
+    func databaseURL() throws -> URL {
+        try containerURL().appendingPathComponent("Library/Application Support/JobApplicationCopilot/jobs.sqlite3")
     }
 }
