@@ -646,7 +646,7 @@ git commit -m "feat: install daily worker launch agent"
 - Consumes: the bundled `JobScoutWorker` executable and `LaunchAgentInstaller`.
 - Produces: `FetchController.fetch()`, `isRunning`, `errorMessage`, and a visible Fetch control that always launches `--force`.
 
-- [ ] **Step 1: Write failing Fetch argument and error tests**
+- [x] **Step 1: Write failing Fetch argument and error tests**
 
 ```swift
 @MainActor
@@ -665,23 +665,23 @@ func testFetchLaunchFailureIsVisibleAndDoesNotChangeJobs() throws {
 }
 ```
 
-- [ ] **Step 2: Run tests and verify failure**
+- [x] **Step 2: Run tests and verify failure**
 
 Run the full test command; expect `FetchController` not found.
 
-- [ ] **Step 3: Embed and launch one helper executable**
+- [x] **Step 3: Embed and launch one helper executable**
 
 Add a Copy Files phase that places `JobScoutWorker` at `Contents/Helpers/job-scout`. Resolve that URL from `Bundle.main.bundleURL`; do not use DerivedData, `/Applications`, the repository, or the user's home directory. `FetchController` launches it directly with `--force`, observes termination asynchronously, prevents duplicate button clicks only within the current App process, and relies on `WorkerLock` for cross-process exclusion.
 
-- [ ] **Step 4: Install the LaunchAgent and surface failures**
+- [x] **Step 4: Install the LaunchAgent and surface failures**
 
 During App startup, call `install(workerURL:)` after the App Group/database migration succeeds. Keep installation errors separate from database errors so the App remains usable; show “Automatic scheduling unavailable” with the actionable error. Do not mark scheduling active when `launchctl` fails.
 
-- [ ] **Step 5: Replace Refresh with Fetch while retaining explicit reload**
+- [x] **Step 5: Replace Refresh with Fetch while retaining explicit reload**
 
 The main toolbar Fetch button invokes `fetch()`. Keep a separate Reload action or reload on worker termination so displayed jobs reflect committed results. Disable Fetch while the local controller's child is running; an `.alreadyRunning` worker exit is displayed as “A run is already active,” not as success.
 
-- [ ] **Step 6: Run store, Fetch, full tests, and unsigned builds**
+- [x] **Step 6: Run store, Fetch, full tests, and unsigned builds**
 
 ```bash
 xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobApplicationWidget \
@@ -698,7 +698,7 @@ xcodebuild -project JobApplicationWidget.xcodeproj -scheme JobScoutWorker \
 
 Expected: all tests and both unsigned products PASS; the Widget target contains none of the network, launchd, power, coordinator, or Fetch files.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add JobApplicationWidget/FetchController.swift JobApplicationWidget/JobApplicationWidgetApp.swift \

@@ -74,6 +74,9 @@
 		W015 = {isa = PBXBuildFile; fileRef = D102; };
 		W016 = {isa = PBXBuildFile; fileRef = D103; };
 		W017 = {isa = PBXBuildFile; fileRef = A108; };
+		A026 = {isa = PBXBuildFile; fileRef = A123; };
+		C024 = {isa = PBXBuildFile; fileRef = C116; };
+		A027 = {isa = PBXBuildFile; fileRef = W100; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		C014 = {isa = PBXBuildFile; fileRef = C107; };
 		C012 = {isa = PBXBuildFile; fileRef = A103; };
 		C008 = {isa = PBXBuildFile; fileRef = C104; };
@@ -128,6 +131,8 @@
 		W102 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobScoutWorker.entitlements; sourceTree = "<group>"; };
 		D102 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
 		D103 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		A123 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchController.swift; sourceTree = "<group>"; };
+		C116 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchControllerTests.swift; sourceTree = "<group>"; };
 		C110 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkGateTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -139,17 +144,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A300 = {isa = PBXGroup; children = (A101, A102, A103, A104, A105, A106, A107, A108, A109, A110, A111, A112, A113, A114, A115, A117, A118, A119, A120, A121, A122); path = JobApplicationWidget; sourceTree = "<group>"; };
+		A300 = {isa = PBXGroup; children = (A101, A102, A103, A104, A105, A106, A107, A108, A109, A110, A111, A112, A113, A114, A115, A117, A118, A119, A120, A121, A122, A123); path = JobApplicationWidget; sourceTree = "<group>"; };
 		B300 = {isa = PBXGroup; children = (B101, B102, B104); path = JobApplicationWidgetWidget; sourceTree = "<group>"; };
 		W300 = {isa = PBXGroup; children = (W101, W102); path = JobScoutWorker; sourceTree = "<group>"; };
 		A301 = {isa = PBXGroup; children = (A300, B300, W300); sourceTree = "<group>"; };
 		A302 = {isa = PBXGroup; children = (A100, B100, W100); name = Products; sourceTree = "<group>"; };
-		C300 = {isa = PBXGroup; children = (C101, C102, C103, C104, C105, C106, C107, C108, C109, C110, C111, C112, C113, C114, C115); path = JobApplicationWidgetTests; sourceTree = "<group>"; };
+		C300 = {isa = PBXGroup; children = (C101, C102, C103, C104, C105, C106, C107, C108, C109, C110, C111, C112, C113, C114, C115, C116); path = JobApplicationWidgetTests; sourceTree = "<group>"; };
 		C301 = {isa = PBXGroup; children = (A300, B300, W300, C300); sourceTree = "<group>"; };
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A400 = {isa = PBXNativeTarget; buildConfigurationList = A500; buildPhases = (A600, A200, A601, A602); buildRules = (); dependencies = (A700); name = JobApplicationWidget; productName = JobApplicationWidget; productReference = A100; productType = "com.apple.product-type.application"; };
+		A400 = {isa = PBXNativeTarget; buildConfigurationList = A500; buildPhases = (A600, A200, A601, A602, A603); buildRules = (); dependencies = (A700, A702); name = JobApplicationWidget; productName = JobApplicationWidget; productReference = A100; productType = "com.apple.product-type.application"; };
 		B400 = {isa = PBXNativeTarget; buildConfigurationList = B500; buildPhases = (B600, B200, B601); buildRules = (); dependencies = (); name = JobApplicationWidgetExtension; productName = JobApplicationWidgetExtension; productReference = B100; productType = "com.apple.product-type.app-extension"; };
 		C400 = {isa = PBXNativeTarget; buildConfigurationList = C500; buildPhases = (C600, C200); buildRules = (); dependencies = (C700); name = JobApplicationWidgetTests; productName = JobApplicationWidgetTests; productReference = C100; productType = "com.apple.product-type.bundle.unit-test"; };
 		W400 = {isa = PBXNativeTarget; buildConfigurationList = W500; buildPhases = (W600, W200); buildRules = (); dependencies = (); name = JobScoutWorker; productName = JobScoutWorker; productReference = W100; productType = "com.apple.product-type.tool"; };
@@ -162,19 +167,22 @@
 /* Begin PBXResourcesBuildPhase section */
 		A601 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 		A602 = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (A008); name = "Embed Foundation Extensions"; runOnlyForDeploymentPostprocessing = 0; };
+		A603 = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = "Contents/Helpers"; dstSubfolderSpec = 1; files = (A027); name = "Embed Job Scout Worker"; runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXRezBuildPhase section */
-		A600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A001, A002, A003, A009, A010, A011, A012, A013, A014, A015, A016, A017, A018, A020, A021, A022, A023, A024, A025); runOnlyForDeploymentPostprocessing = 0; };
+		A600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A001, A002, A003, A009, A010, A011, A012, A013, A014, A015, A016, A017, A018, A020, A021, A022, A023, A024, A025, A026); runOnlyForDeploymentPostprocessing = 0; };
 		B600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B001, B004, B005, B006, B007, B010); runOnlyForDeploymentPostprocessing = 0; };
 		B601 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		C600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C001, C002, C003, C004, C005, C006, C007, C008, C009, C010, C011, C012, C013, C014, C015, C016, C017, C018, C019, C020, C021, C022, C023); runOnlyForDeploymentPostprocessing = 0; };
+		C600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C001, C002, C003, C004, C005, C006, C007, C008, C009, C010, C011, C012, C013, C014, C015, C016, C017, C018, C019, C020, C021, C022, C023, C024); runOnlyForDeploymentPostprocessing = 0; };
 		W600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (W001, W002, W003, W004, W005, W006, W007, W008, W009, W010, W011, W012, W013, W017); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXTargetDependency section */
 		A700 = {isa = PBXTargetDependency; target = B400; targetProxy = A701; };
 		A701 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = B400; remoteInfo = JobApplicationWidgetExtension; };
+		A702 = {isa = PBXTargetDependency; target = W400; targetProxy = A703; };
+		A703 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = W400; remoteInfo = JobScoutWorker; };
 		C700 = {isa = PBXTargetDependency; target = A400; targetProxy = C701; };
 		C701 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = A400; remoteInfo = JobApplicationWidget; };
 /* End PBXTargetDependency section */

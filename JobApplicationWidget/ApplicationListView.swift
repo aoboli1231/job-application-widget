@@ -3,6 +3,8 @@ import AppKit
 
 struct ApplicationListView: View {
     @ObservedObject var store: ApplicationStore
+    @ObservedObject var fetch: FetchController
+    let schedulingErrorMessage: String?
     @State private var showOnlyOpen = false
     @State private var showingAddJob = false
 
@@ -17,6 +19,20 @@ struct ApplicationListView: View {
             List {
                 if let errorMessage = store.errorMessage {
                     Section("Database error") {
+                        Text(errorMessage)
+                            .foregroundStyle(.red)
+                            .textSelection(.enabled)
+                    }
+                }
+                if let schedulingErrorMessage {
+                    Section("Automatic scheduling unavailable") {
+                        Text(schedulingErrorMessage)
+                            .foregroundStyle(.red)
+                            .textSelection(.enabled)
+                    }
+                }
+                if let errorMessage = fetch.errorMessage {
+                    Section("Fetch error") {
                         Text(errorMessage)
                             .foregroundStyle(.red)
                             .textSelection(.enabled)
@@ -47,6 +63,13 @@ struct ApplicationListView: View {
             .navigationTitle("Job Checklist")
             .toolbar {
                 ToolbarItem {
+                    Button { fetch.fetch() } label: {
+                        Label(fetch.isRunning ? "Fetching" : "Fetch", systemImage: "arrow.down.circle")
+                    }
+                    .disabled(fetch.isRunning)
+                    .help("Run a job search now")
+                }
+                ToolbarItem {
                     Button { showingAddJob = true } label: {
                         Label("Add job", systemImage: "plus")
                     }
@@ -54,7 +77,7 @@ struct ApplicationListView: View {
                 }
                 ToolbarItem {
                     Button { store.reload() } label: {
-                        Label("Refresh", systemImage: "arrow.clockwise")
+                        Label("Reload", systemImage: "arrow.clockwise")
                     }
                     .help("Reload jobs from the shared database")
                 }

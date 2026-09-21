@@ -18,3 +18,24 @@ enum WorkerCommand: Equatable {
         }
     }
 }
+
+enum WorkerResultToken: String {
+    static let prefix = "job-scout-result:"
+
+    case succeeded
+    case skippedNotDue = "skipped_not_due"
+    case skippedAlreadySucceeded = "skipped_already_succeeded"
+    case alreadyRunning = "already_running"
+    case failed
+
+    var line: String { Self.prefix + rawValue }
+
+    static func parse(_ output: String) -> WorkerResultToken? {
+        output.split(whereSeparator: \.isNewline)
+            .compactMap { line in
+                guard line.hasPrefix(prefix) else { return nil }
+                return WorkerResultToken(rawValue: String(line.dropFirst(prefix.count)))
+            }
+            .last
+    }
+}

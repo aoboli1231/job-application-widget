@@ -47,18 +47,23 @@ private func run() async -> Int32 {
         switch result {
         case .succeeded:
             logger.info("event=worker_finished result=succeeded")
+            print(WorkerResultToken.succeeded.line)
             return 0
         case .skippedNotDue:
             logger.info("event=worker_finished result=skipped_not_due")
+            print(WorkerResultToken.skippedNotDue.line)
             return 0
         case .skippedAlreadySucceeded:
             logger.info("event=worker_finished result=skipped_already_succeeded")
+            print(WorkerResultToken.skippedAlreadySucceeded.line)
             return 0
         case .alreadyRunning:
             logger.info("event=worker_finished result=already_running")
+            print(WorkerResultToken.alreadyRunning.line)
             return 0
         case let .failed(message):
             logger.error("event=worker_finished result=failed error=\(message, privacy: .public)")
+            print(WorkerResultToken.failed.line)
             fputs("job-scout: \(message)\n", stderr)
             return 1
         }
