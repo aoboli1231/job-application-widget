@@ -23,7 +23,7 @@ protocol WorkerPerforming {
 }
 
 protocol SuccessfulRunBackupWriting {
-    func writeSuccessfulBackup(database: JobDatabase, runID: UUID, at: Date) throws
+    func writeSuccessfulBackup(database: JobDatabase, runID: UUID, at: Date) throws -> URL
 }
 
 enum WorkerExit: Equatable {
@@ -124,7 +124,7 @@ final class WorkerCoordinator {
                     switch outcome {
                     case .succeeded:
                         do {
-                            try backup.writeSuccessfulBackup(database: database, runID: runID, at: now())
+                            _ = try backup.writeSuccessfulBackup(database: database, runID: runID, at: now())
                             try database.finishRun(id: runID, status: .succeeded, error: nil, at: now())
                             return .succeeded
                         } catch { return finishFailed(runID: runID, error: error) }

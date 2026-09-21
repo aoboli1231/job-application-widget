@@ -490,13 +490,14 @@ private final class BackupSpy: SuccessfulRunBackupWriting {
     private var sawCurrentRunTerminal = false
     var callCount: Int { lock.withLock { calls } }
     var sawCurrentRunTerminalBeforeBackup: Bool { lock.withLock { sawCurrentRunTerminal } }
-    func writeSuccessfulBackup(database: JobApplicationWidget.JobDatabase, runID: UUID, at: Date) throws {
+    func writeSuccessfulBackup(database: JobApplicationWidget.JobDatabase, runID: UUID, at: Date) throws -> URL {
         let currentRunWasTerminal = try database.latestResumableRun(localDay: "2026-09-21")?.id != runID
         try lock.withLock {
             calls += 1
             sawCurrentRunTerminal = currentRunWasTerminal
             if let error { throw error }
         }
+        return URL(fileURLWithPath: "/dev/null")
     }
 }
 

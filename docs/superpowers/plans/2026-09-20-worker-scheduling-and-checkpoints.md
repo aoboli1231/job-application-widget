@@ -508,7 +508,7 @@ git commit -m "feat: coordinate resumable daily worker runs"
 - Consumes: `JobDatabase.jobs()`, an App Group backup directory, a run ID, and a clock.
 - Produces: `JSONBackupWriter.writeSuccessfulBackup(database:runID:at:) throws -> URL` and `pruneKeepingNewest(_:)`.
 
-- [ ] **Step 1: Write failing content, atomicity, and retention tests**
+- [x] **Step 1: Write failing content, atomicity, and retention tests**
 
 ```swift
 func testBackupContainsCurrentJobsAndRunMetadata() throws {
@@ -523,11 +523,11 @@ func testThirtyFirstBackupDeletesOnlyOldestCompletedFile() throws { /* fixed tim
 func testEncodingOrMoveFailureLeavesPreviousBackupUntouched() throws { /* injected FileManager operations */ }
 ```
 
-- [ ] **Step 2: Run focused tests and verify failure**
+- [x] **Step 2: Run focused tests and verify failure**
 
 Run the full test command; expect missing backup types.
 
-- [ ] **Step 3: Implement one Codable envelope and atomic replacement**
+- [x] **Step 3: Implement one Codable envelope and atomic replacement**
 
 ```swift
 struct JobBackup: Codable, Equatable {
@@ -540,11 +540,11 @@ struct JobBackup: Codable, Equatable {
 
 Encode with sorted keys and ISO-8601 dates. Write to a sibling temporary file with owner-only permissions, call `FileHandle.synchronize()`, then atomically rename to `jobs-<UTC timestamp>-<runID>.json`. Enumerate only files matching that exact prefix/suffix, sort by creation timestamp encoded in the name, and delete the excess oldest files only after the new file is durable. A failure propagates to the coordinator and must not mark the run succeeded.
 
-- [ ] **Step 4: Run backup tests and inspect permissions**
+- [x] **Step 4: Run backup tests and inspect permissions**
 
 Assert 30 files remain, the newest exists, unrelated files remain, no `.tmp` file remains after success, and the final mode is `0600`.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add Shared/JSONBackupWriter.swift JobApplicationWidgetTests/JSONBackupWriterTests.swift \
