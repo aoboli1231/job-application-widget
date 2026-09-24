@@ -4,7 +4,7 @@
 
 **Goal:** Add a low-power macOS worker that runs once after 08:00 Melbourne time when the network is stably usable, pauses safely for sleep or network loss, resumes from SQLite checkpoints, rejects concurrent Fetch/automatic runs, and writes rolling JSON backups.
 
-**Architecture:** Add one bundled Swift command-line executable, `JobScoutWorker`, driven by a small coordinator whose time, reachability, power events, HTTPS probes, and work performer are injected in tests. `launchd` starts it only at login and at the 08:00 calendar event; while a due run is offline, one `NWPathMonitor` plus one-shot timers wait for events without polling. SQLite remains authoritative and gains only a `runs` table and schema version 2; checkpoints and success state live there, while atomic JSON exports are recovery backups only.
+**Architecture:** Add one bundled Swift command-line executable, `JobScoutWorker`, driven by a small coordinator whose time, reachability, power events, HTTPS probes, and work performer are injected in tests. `launchd` starts it at login and at local calendar times corresponding to Melbourne 08:00 across daylight saving time; an early candidate exits before touching the network. While a due run is offline, one `NWPathMonitor` plus one-shot timers wait for events without polling. SQLite remains authoritative and gains only a `runs` table and schema version 2; checkpoints and success state live there, while atomic JSON exports are recovery backups only.
 
 **Tech Stack:** Swift 5, Foundation, AppKit workspace notifications, Network.framework, SQLite3, Darwin `flock`, XCTest, `launchd`; macOS 13+; no third-party dependencies.
 
@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - Target macOS 13 or later; keep the existing App Group `group.com.aobo.JobApplicationCopilot`.
-- `launchd` uses only `RunAtLoad` and `StartCalendarInterval` at 08:00; never add `StartInterval`, `ThrottleInterval` as a polling mechanism, or a 15-minute loop.
+- `launchd` uses only `RunAtLoad` and `StartCalendarInterval` at the local clock times that may equal Melbourne 08:00; never add `StartInterval`, `ThrottleInterval` as a polling mechanism, or a 15-minute loop.
 - Use the explicit `Australia/Melbourne` time zone for the daily boundary and 08:00 due calculation, independent of the Mac's current time zone.
 - Waiting for connectivity uses `NWPathMonitor` events and cancellable one-shot timers only; no fixed polling loop.
 - Require 60 continuous seconds of a satisfied path, followed by two successful lightweight HTTPS requests separated by 3 seconds; any path loss or sleep resets the gate.
@@ -718,7 +718,7 @@ git commit -m "feat: add force Fetch worker launch"
 - Consumes: the complete scheduling/checkpoint foundation.
 - Produces: repeatable acceptance tests and operator documentation; no new runtime abstraction.
 
-- [ ] **Step 1: Add a deterministic end-to-end acceptance test**
+- [x] **Step 1: Add a deterministic end-to-end acceptance test**
 
 ```swift
 func testOfflineSleepWakeStableNetworkRunAndBackup() async throws {
@@ -739,35 +739,39 @@ func testOfflineSleepWakeStableNetworkRunAndBackup() async throws {
 
 Use fakes only; the test must finish without real waits, network, sleep, App Group, or launchd changes.
 
-- [ ] **Step 2: Add static launchd and CPU-wakeup guards**
+- [x] **Step 2: Add static launchd and CPU-wakeup guards**
 
 Parse the generated plist and assert the only launch keys are `RunAtLoad` and `StartCalendarInterval`. Add a fake scheduler counter test proving an hour of offline virtual time schedules no repeating timer and makes no HTTPS request until a new path event arrives.
 
-- [ ] **Step 3: Run all automated acceptance commands**
+- [x] **Step 3: Run all automated acceptance commands**
 
 Run all four commands from Task 8 Step 6.
 
 Expected: PASS. Also run `rg -n 'StartInterval|15.?min|sleep\(|usleep\(|Power Assertion|IOPMAssertion' JobScoutWorker Shared JobApplicationWidget` and confirm there is no polling or wake assertion implementation; test names/documentation may mention forbidden keys only as assertions.
 
+The signed test host also verifies 31 forced coordinator runs against an isolated SQLite database and keeps only 30 decodable backups. Cross-time-zone tests verify that Shanghai's 05:00/06:00 local launch candidates cover Melbourne 08:00 on both sides of daylight saving time.
+
 - [ ] **Step 4: Perform signed manual acceptance on a configured development team**
 
 With the registered App Group and signed app/helper:
 
-1. launch the app and confirm the LaunchAgent plist contains only login and 08:00 triggers;
+1. launch the app and confirm the LaunchAgent plist contains only login and calendar candidates for Melbourne 08:00 (05:00/06:00 on a Shanghai-time Mac);
 2. disconnect networking after 08:00 and confirm the worker remains idle with negligible CPU in Activity Monitor;
 3. reconnect for under 60 seconds and disconnect; confirm no run begins;
 4. reconnect for 60 seconds and confirm exactly two probes then one run;
 5. start Fetch while a scheduled run holds the lock; confirm the second invocation reports already running;
 6. sleep during the performer, wake, and confirm the same run ID resumes only after fresh stability/probes;
-7. run 31 successful force invocations using the test performer and confirm exactly 30 valid JSON backups remain.
+7. run 31 successful force invocations using the isolated test performer and confirm exactly 30 valid JSON backups remain.
 
 Record observed timestamps, run IDs, CPU sample, and backup count in the review/commit notes. Do not add machine-specific paths or logs to the repository.
 
-- [ ] **Step 5: Update README without claiming future ingestion**
+Partial acceptance on 2026-09-24: the signed app, Widget, and helper passed strict code-signature verification; the installed LaunchAgent showed only login and two calendar triggers and was not running while idle. Scheduled runs succeeded on three consecutive days, a prior signed force run succeeded, concurrent invocation was rejected, and the isolated signed test host completed 31 runs with 30 valid backups. Real Wi-Fi loss/flapping, offline CPU measurement, and sleep/wake during active work remain pending because the user deferred disruptive manual checks. Keep this step unchecked until those checks are observed.
+
+- [x] **Step 5: Update README without claiming future ingestion**
 
 Document:
 
-- Melbourne 08:00 calendar plus login/deferred-wake behavior;
+- Melbourne 08:00 calendar candidates plus login/deferred-wake behavior;
 - event-driven offline waiting, 60 seconds, and two probes;
 - Fetch force semantics and lock behavior;
 - sleep/network checkpoint and resume behavior;
@@ -775,18 +779,20 @@ Document:
 - LaunchAgent label/plist location, log location, uninstall command, and error recovery;
 - that Outlook, scraping, Chrome, Codex, risk/matching, and document generation are still not implemented.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit verified work; retain the manual acceptance follow-up**
 
 ```bash
 git add README.md JobApplicationWidgetTests/WorkerAcceptanceTests.swift \
-  JobApplicationWidget.xcodeproj/project.pbxproj
+  JobApplicationWidgetTests/LaunchAgentInstallerTests.swift \
+  Shared/LaunchAgentInstaller.swift JobApplicationWidget.xcodeproj/project.pbxproj \
+  docs/superpowers/plans/2026-09-20-worker-scheduling-and-checkpoints.md
 git commit -m "test: verify worker scheduling and recovery"
 ```
 
 ## Completion Criteria
 
 - Schema 1 upgrades atomically to schema 2 and existing jobs/local tracking remain byte-for-byte equivalent through typed reads.
-- Login and 08:00 are the only automatic launch triggers; sleep-through-08:00 is handled by launchd's deferred calendar delivery/startup due check, not polling or a wake assertion.
+- Login and local calendar candidates for Melbourne 08:00 are the only automatic launch triggers; sleep-through-08:00 is handled by launchd's deferred calendar delivery/startup due check, not polling or a wake assertion.
 - A scheduled day runs once after stable connectivity; force may run again but still obeys power, network, probes, and lock gates.
 - Sleep or network loss checkpoints before owned work is cancelled and resumes the same run only after fresh validation.
 - Waiting offline creates no repeating timer, HTTPS traffic, browser, Codex, or business-table reads.

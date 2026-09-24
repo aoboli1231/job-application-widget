@@ -1,212 +1,777 @@
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
-	classes = {};
+	classes = {
+	};
 	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A001 = {isa = PBXBuildFile; fileRef = A101; };
-		A002 = {isa = PBXBuildFile; fileRef = A102; };
-		A003 = {isa = PBXBuildFile; fileRef = A103; };
-		A004 = {isa = PBXBuildFile; fileRef = A104; };
-		A005 = {isa = PBXBuildFile; fileRef = A105; };
-		A006 = {isa = PBXBuildFile; fileRef = A106; };
-		A007 = {isa = PBXBuildFile; fileRef = A107; };
-		A008 = {isa = PBXBuildFile; fileRef = B100; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		B001 = {isa = PBXBuildFile; fileRef = B101; };
-		B002 = {isa = PBXBuildFile; fileRef = B102; };
-		C001 = {isa = PBXBuildFile; fileRef = C101; };
-		A009 = {isa = PBXBuildFile; fileRef = A106; };
-		A010 = {isa = PBXBuildFile; fileRef = A107; };
-		A011 = {isa = PBXBuildFile; fileRef = A108; };
-		B004 = {isa = PBXBuildFile; fileRef = A106; };
-		B005 = {isa = PBXBuildFile; fileRef = A107; };
-		B006 = {isa = PBXBuildFile; fileRef = A108; };
-		C002 = {isa = PBXBuildFile; fileRef = C102; };
-		C003 = {isa = PBXBuildFile; fileRef = C103; };
-		D001 = {isa = PBXBuildFile; fileRef = D101; };
-		A012 = {isa = PBXBuildFile; fileRef = A109; };
-		B007 = {isa = PBXBuildFile; fileRef = A109; };
-		C004 = {isa = PBXBuildFile; fileRef = A109; };
-		C005 = {isa = PBXBuildFile; fileRef = A106; };
-		C006 = {isa = PBXBuildFile; fileRef = A107; };
-		C007 = {isa = PBXBuildFile; fileRef = A108; };
-		A013 = {isa = PBXBuildFile; fileRef = A110; };
-		C010 = {isa = PBXBuildFile; fileRef = A110; };
-		C011 = {isa = PBXBuildFile; fileRef = C106; };
-		A014 = {isa = PBXBuildFile; fileRef = A111; };
-		C013 = {isa = PBXBuildFile; fileRef = A111; };
-		A015 = {isa = PBXBuildFile; fileRef = A112; };
-		B010 = {isa = PBXBuildFile; fileRef = A112; };
-		C015 = {isa = PBXBuildFile; fileRef = A112; };
-		C016 = {isa = PBXBuildFile; fileRef = C108; };
-		A016 = {isa = PBXBuildFile; fileRef = A113; };
-		A017 = {isa = PBXBuildFile; fileRef = A114; };
-		C017 = {isa = PBXBuildFile; fileRef = C109; };
-		A018 = {isa = PBXBuildFile; fileRef = A115; };
-		C018 = {isa = PBXBuildFile; fileRef = C110; };
-		A020 = {isa = PBXBuildFile; fileRef = A117; };
-		A021 = {isa = PBXBuildFile; fileRef = A118; };
-		C019 = {isa = PBXBuildFile; fileRef = C111; };
-		A022 = {isa = PBXBuildFile; fileRef = A119; };
-		C020 = {isa = PBXBuildFile; fileRef = C112; };
-		A023 = {isa = PBXBuildFile; fileRef = A120; };
-		C021 = {isa = PBXBuildFile; fileRef = C113; };
-		A024 = {isa = PBXBuildFile; fileRef = A121; };
-		C022 = {isa = PBXBuildFile; fileRef = C114; };
-		C023 = {isa = PBXBuildFile; fileRef = C115; };
-		A025 = {isa = PBXBuildFile; fileRef = A122; };
-		W001 = {isa = PBXBuildFile; fileRef = W101; };
-		W002 = {isa = PBXBuildFile; fileRef = A106; };
-		W003 = {isa = PBXBuildFile; fileRef = A107; };
-		W004 = {isa = PBXBuildFile; fileRef = A109; };
-		W005 = {isa = PBXBuildFile; fileRef = A112; };
-		W006 = {isa = PBXBuildFile; fileRef = A113; };
-		W007 = {isa = PBXBuildFile; fileRef = A114; };
-		W008 = {isa = PBXBuildFile; fileRef = A115; };
-		W009 = {isa = PBXBuildFile; fileRef = A117; };
-		W010 = {isa = PBXBuildFile; fileRef = A118; };
-		W011 = {isa = PBXBuildFile; fileRef = A119; };
-		W012 = {isa = PBXBuildFile; fileRef = A120; };
-		W013 = {isa = PBXBuildFile; fileRef = A122; };
-		W014 = {isa = PBXBuildFile; fileRef = D101; };
-		W015 = {isa = PBXBuildFile; fileRef = D102; };
-		W016 = {isa = PBXBuildFile; fileRef = D103; };
-		W017 = {isa = PBXBuildFile; fileRef = A108; };
-		A026 = {isa = PBXBuildFile; fileRef = A123; };
-		C024 = {isa = PBXBuildFile; fileRef = C116; };
-		A027 = {isa = PBXBuildFile; fileRef = W100; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C014 = {isa = PBXBuildFile; fileRef = C107; };
-		C012 = {isa = PBXBuildFile; fileRef = A103; };
-		C008 = {isa = PBXBuildFile; fileRef = C104; };
-		C009 = {isa = PBXBuildFile; fileRef = C105; };
+		A001 /* JobApplicationWidgetApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A101 /* JobApplicationWidgetApp.swift */; };
+		A002 /* ApplicationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A102 /* ApplicationListView.swift */; };
+		A003 /* ../Shared/ApplicationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A103 /* ../Shared/ApplicationModel.swift */; };
+		A008 /* JobApplicationWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B100 /* JobApplicationWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A009 /* ../Shared/Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = A106 /* ../Shared/Job.swift */; };
+		A010 /* ../Shared/DatabaseLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107 /* ../Shared/DatabaseLocation.swift */; };
+		A011 /* ../Shared/WidgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A108 /* ../Shared/WidgetSummary.swift */; };
+		A012 /* ../Shared/JobDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A109 /* ../Shared/JobDatabase.swift */; };
+		A013 /* ../Shared/LegacyJobMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110 /* ../Shared/LegacyJobMigrator.swift */; };
+		A014 /* ApplicationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111 /* ApplicationStore.swift */; };
+		A015 /* ../Shared/RunRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112 /* ../Shared/RunRecord.swift */; };
+		A016 /* ../Shared/WorkerPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = A113 /* ../Shared/WorkerPaths.swift */; };
+		A017 /* ../Shared/WorkerLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114 /* ../Shared/WorkerLock.swift */; };
+		A018 /* ../Shared/NetworkGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A115 /* ../Shared/NetworkGate.swift */; };
+		A020 /* ../Shared/PowerEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A117 /* ../Shared/PowerEvents.swift */; };
+		A021 /* ../Shared/WorkerResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = A118 /* ../Shared/WorkerResources.swift */; };
+		A022 /* ../Shared/WorkerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A119 /* ../Shared/WorkerCoordinator.swift */; };
+		A023 /* ../Shared/JSONBackupWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A120 /* ../Shared/JSONBackupWriter.swift */; };
+		A024 /* ../Shared/LaunchAgentInstaller.swift in Sources */ = {isa = PBXBuildFile; fileRef = A121 /* ../Shared/LaunchAgentInstaller.swift */; };
+		A025 /* ../Shared/WorkerCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A122 /* ../Shared/WorkerCommand.swift */; };
+		A026 /* FetchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A123 /* FetchController.swift */; };
+		A027 /* job-scout in Embed Job Scout Worker */ = {isa = PBXBuildFile; fileRef = W100 /* job-scout */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		B001 /* JobApplicationWidgetExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B101 /* JobApplicationWidgetExtension.swift */; };
+		B004 /* ../Shared/Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = A106 /* ../Shared/Job.swift */; };
+		B005 /* ../Shared/DatabaseLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107 /* ../Shared/DatabaseLocation.swift */; };
+		B006 /* ../Shared/WidgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A108 /* ../Shared/WidgetSummary.swift */; };
+		B007 /* ../Shared/JobDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A109 /* ../Shared/JobDatabase.swift */; };
+		B010 /* ../Shared/RunRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112 /* ../Shared/RunRecord.swift */; };
+		C001 /* ProjectSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C101 /* ProjectSmokeTests.swift */; };
+		C002 /* JobModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C102 /* JobModelTests.swift */; };
+		C003 /* DatabaseLocationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C103 /* DatabaseLocationTests.swift */; };
+		C004 /* ../Shared/JobDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A109 /* ../Shared/JobDatabase.swift */; };
+		C005 /* ../Shared/Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = A106 /* ../Shared/Job.swift */; };
+		C006 /* ../Shared/DatabaseLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107 /* ../Shared/DatabaseLocation.swift */; };
+		C007 /* ../Shared/WidgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A108 /* ../Shared/WidgetSummary.swift */; };
+		C008 /* JobDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C104 /* JobDatabaseTests.swift */; };
+		C009 /* TestDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C105 /* TestDatabase.swift */; };
+		C010 /* ../Shared/LegacyJobMigrator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A110 /* ../Shared/LegacyJobMigrator.swift */; };
+		C011 /* LegacyJobMigratorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C106 /* LegacyJobMigratorTests.swift */; };
+		C012 /* ../Shared/ApplicationModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A103 /* ../Shared/ApplicationModel.swift */; };
+		C013 /* ApplicationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A111 /* ApplicationStore.swift */; };
+		C014 /* ApplicationStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C107 /* ApplicationStoreTests.swift */; };
+		C015 /* ../Shared/RunRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112 /* ../Shared/RunRecord.swift */; };
+		C016 /* RunDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C108 /* RunDatabaseTests.swift */; };
+		C017 /* WorkerLockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C109 /* WorkerLockTests.swift */; };
+		C018 /* NetworkGateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C110 /* NetworkGateTests.swift */; };
+		C019 /* PowerAndResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C111 /* PowerAndResourceTests.swift */; };
+		C020 /* WorkerCoordinatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C112 /* WorkerCoordinatorTests.swift */; };
+		C021 /* JSONBackupWriterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C113 /* JSONBackupWriterTests.swift */; };
+		C022 /* LaunchAgentInstallerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C114 /* LaunchAgentInstallerTests.swift */; };
+		C023 /* WorkerCommandTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C115 /* WorkerCommandTests.swift */; };
+		C024 /* FetchControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C116 /* FetchControllerTests.swift */; };
+		C025 /* WorkerAcceptanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C117 /* WorkerAcceptanceTests.swift */; };
+		C25CF012306121AC0061F8E9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D101 /* libsqlite3.tbd */; };
+		C25CF013306121AC0061F8E9 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D101 /* libsqlite3.tbd */; };
+		D001 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D101 /* libsqlite3.tbd */; };
+		W001 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = W101 /* main.swift */; };
+		W002 /* ../Shared/Job.swift in Sources */ = {isa = PBXBuildFile; fileRef = A106 /* ../Shared/Job.swift */; };
+		W003 /* ../Shared/DatabaseLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A107 /* ../Shared/DatabaseLocation.swift */; };
+		W004 /* ../Shared/JobDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A109 /* ../Shared/JobDatabase.swift */; };
+		W005 /* ../Shared/RunRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = A112 /* ../Shared/RunRecord.swift */; };
+		W006 /* ../Shared/WorkerPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = A113 /* ../Shared/WorkerPaths.swift */; };
+		W007 /* ../Shared/WorkerLock.swift in Sources */ = {isa = PBXBuildFile; fileRef = A114 /* ../Shared/WorkerLock.swift */; };
+		W008 /* ../Shared/NetworkGate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A115 /* ../Shared/NetworkGate.swift */; };
+		W009 /* ../Shared/PowerEvents.swift in Sources */ = {isa = PBXBuildFile; fileRef = A117 /* ../Shared/PowerEvents.swift */; };
+		W010 /* ../Shared/WorkerResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = A118 /* ../Shared/WorkerResources.swift */; };
+		W011 /* ../Shared/WorkerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A119 /* ../Shared/WorkerCoordinator.swift */; };
+		W012 /* ../Shared/JSONBackupWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A120 /* ../Shared/JSONBackupWriter.swift */; };
+		W013 /* ../Shared/WorkerCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A122 /* ../Shared/WorkerCommand.swift */; };
+		W014 /* libsqlite3.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D101 /* libsqlite3.tbd */; };
+		W015 /* Network.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D102 /* Network.framework */; };
+		W016 /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D103 /* AppKit.framework */; };
+		W017 /* ../Shared/WidgetSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = A108 /* ../Shared/WidgetSummary.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		A701 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A800 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B400;
+			remoteInfo = JobApplicationWidgetExtension;
+		};
+		A703 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A800 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = W400;
+			remoteInfo = JobScoutWorker;
+		};
+		C701 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A800 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A400;
+			remoteInfo = JobApplicationWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A602 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A008 /* JobApplicationWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A603 /* Embed Job Scout Worker */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = Contents/Helpers;
+			dstSubfolderSpec = 1;
+			files = (
+				A027 /* job-scout in Embed Job Scout Worker */,
+			);
+			name = "Embed Job Scout Worker";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
-		A100 = {isa = PBXFileReference; lastKnownFileType = wrapper.application; path = JobApplicationWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobApplicationWidgetApp.swift; sourceTree = "<group>"; };
-		A102 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationListView.swift; sourceTree = "<group>"; };
-		A103 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/ApplicationModel.swift; sourceTree = "<group>"; };
-		A104 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JobApplicationWidget.entitlements; sourceTree = "<group>"; };
-		A105 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JobApplicationWidget-Info.plist; sourceTree = "<group>"; };
-		B100 = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; path = JobApplicationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		B101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobApplicationWidgetExtension.swift; sourceTree = "<group>"; };
-		B102 = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JobApplicationWidgetExtension-Info.plist; sourceTree = "<group>"; };
-		B104 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobApplicationWidgetExtension.entitlements; sourceTree = "<group>"; };
-		C100 = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = JobApplicationWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
-		A106 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/Job.swift; sourceTree = "<group>"; };
-		A107 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/DatabaseLocation.swift; sourceTree = "<group>"; };
-		A108 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WidgetSummary.swift; sourceTree = "<group>"; };
-		C102 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobModelTests.swift; sourceTree = "<group>"; };
-		C103 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseLocationTests.swift; sourceTree = "<group>"; };
-		C104 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDatabaseTests.swift; sourceTree = "<group>"; };
-		C105 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabase.swift; sourceTree = "<group>"; };
-		C106 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyJobMigratorTests.swift; sourceTree = "<group>"; };
-		C107 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStoreTests.swift; sourceTree = "<group>"; };
-		D101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.text; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
-		A109 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/JobDatabase.swift; sourceTree = "<group>"; };
-		A110 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/LegacyJobMigrator.swift; sourceTree = "<group>"; };
-		A111 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStore.swift; sourceTree = "<group>"; };
-		A112 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/RunRecord.swift; sourceTree = "<group>"; };
-		C108 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDatabaseTests.swift; sourceTree = "<group>"; };
-		A113 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerPaths.swift; sourceTree = "<group>"; };
-		A114 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerLock.swift; sourceTree = "<group>"; };
-		C109 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerLockTests.swift; sourceTree = "<group>"; };
-		A115 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/NetworkGate.swift; sourceTree = "<group>"; };
-		A117 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/PowerEvents.swift; sourceTree = "<group>"; };
-		A118 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerResources.swift; sourceTree = "<group>"; };
-		C111 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerAndResourceTests.swift; sourceTree = "<group>"; };
-		A119 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerCoordinator.swift; sourceTree = "<group>"; };
-		C112 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerCoordinatorTests.swift; sourceTree = "<group>"; };
-		A120 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/JSONBackupWriter.swift; sourceTree = "<group>"; };
-		C113 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONBackupWriterTests.swift; sourceTree = "<group>"; };
-		A121 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/LaunchAgentInstaller.swift; sourceTree = "<group>"; };
-		C114 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAgentInstallerTests.swift; sourceTree = "<group>"; };
-		C115 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerCommandTests.swift; sourceTree = "<group>"; };
-		A122 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerCommand.swift; sourceTree = "<group>"; };
-		W100 = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = "job-scout"; sourceTree = BUILT_PRODUCTS_DIR; };
-		W101 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
-		W102 = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobScoutWorker.entitlements; sourceTree = "<group>"; };
-		D102 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
-		D103 = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		A123 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchController.swift; sourceTree = "<group>"; };
-		C116 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchControllerTests.swift; sourceTree = "<group>"; };
-		C110 = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkGateTests.swift; sourceTree = "<group>"; };
+		A100 /* JobApplicationWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; path = JobApplicationWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A101 /* JobApplicationWidgetApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobApplicationWidgetApp.swift; sourceTree = "<group>"; };
+		A102 /* ApplicationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationListView.swift; sourceTree = "<group>"; };
+		A103 /* ../Shared/ApplicationModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/ApplicationModel.swift; sourceTree = "<group>"; };
+		A104 /* JobApplicationWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = JobApplicationWidget.entitlements; sourceTree = "<group>"; };
+		A105 /* JobApplicationWidget-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JobApplicationWidget-Info.plist"; sourceTree = "<group>"; };
+		A106 /* ../Shared/Job.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/Job.swift; sourceTree = "<group>"; };
+		A107 /* ../Shared/DatabaseLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/DatabaseLocation.swift; sourceTree = "<group>"; };
+		A108 /* ../Shared/WidgetSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WidgetSummary.swift; sourceTree = "<group>"; };
+		A109 /* ../Shared/JobDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/JobDatabase.swift; sourceTree = "<group>"; };
+		A110 /* ../Shared/LegacyJobMigrator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/LegacyJobMigrator.swift; sourceTree = "<group>"; };
+		A111 /* ApplicationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStore.swift; sourceTree = "<group>"; };
+		A112 /* ../Shared/RunRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/RunRecord.swift; sourceTree = "<group>"; };
+		A113 /* ../Shared/WorkerPaths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerPaths.swift; sourceTree = "<group>"; };
+		A114 /* ../Shared/WorkerLock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerLock.swift; sourceTree = "<group>"; };
+		A115 /* ../Shared/NetworkGate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/NetworkGate.swift; sourceTree = "<group>"; };
+		A117 /* ../Shared/PowerEvents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/PowerEvents.swift; sourceTree = "<group>"; };
+		A118 /* ../Shared/WorkerResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerResources.swift; sourceTree = "<group>"; };
+		A119 /* ../Shared/WorkerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerCoordinator.swift; sourceTree = "<group>"; };
+		A120 /* ../Shared/JSONBackupWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/JSONBackupWriter.swift; sourceTree = "<group>"; };
+		A121 /* ../Shared/LaunchAgentInstaller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/LaunchAgentInstaller.swift; sourceTree = "<group>"; };
+		A122 /* ../Shared/WorkerCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ../Shared/WorkerCommand.swift; sourceTree = "<group>"; };
+		A123 /* FetchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchController.swift; sourceTree = "<group>"; };
+		B100 /* JobApplicationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; path = JobApplicationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		B101 /* JobApplicationWidgetExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobApplicationWidgetExtension.swift; sourceTree = "<group>"; };
+		B102 /* JobApplicationWidgetExtension-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "JobApplicationWidgetExtension-Info.plist"; sourceTree = "<group>"; };
+		B104 /* JobApplicationWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobApplicationWidgetExtension.entitlements; sourceTree = "<group>"; };
+		C101 /* ProjectSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
+		C102 /* JobModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobModelTests.swift; sourceTree = "<group>"; };
+		C103 /* DatabaseLocationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseLocationTests.swift; sourceTree = "<group>"; };
+		C104 /* JobDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JobDatabaseTests.swift; sourceTree = "<group>"; };
+		C105 /* TestDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestDatabase.swift; sourceTree = "<group>"; };
+		C106 /* LegacyJobMigratorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyJobMigratorTests.swift; sourceTree = "<group>"; };
+		C107 /* ApplicationStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationStoreTests.swift; sourceTree = "<group>"; };
+		C108 /* RunDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunDatabaseTests.swift; sourceTree = "<group>"; };
+		C109 /* WorkerLockTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerLockTests.swift; sourceTree = "<group>"; };
+		C110 /* NetworkGateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkGateTests.swift; sourceTree = "<group>"; };
+		C111 /* PowerAndResourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerAndResourceTests.swift; sourceTree = "<group>"; };
+		C112 /* WorkerCoordinatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerCoordinatorTests.swift; sourceTree = "<group>"; };
+		C113 /* JSONBackupWriterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONBackupWriterTests.swift; sourceTree = "<group>"; };
+		C114 /* LaunchAgentInstallerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchAgentInstallerTests.swift; sourceTree = "<group>"; };
+		C115 /* WorkerCommandTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerCommandTests.swift; sourceTree = "<group>"; };
+		C116 /* FetchControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchControllerTests.swift; sourceTree = "<group>"; };
+		C117 /* WorkerAcceptanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkerAcceptanceTests.swift; sourceTree = "<group>"; };
+		C25CF015306121AC0061F8E9 /* JobApplicationWidgetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JobApplicationWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		D101 /* libsqlite3.tbd */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.text; name = libsqlite3.tbd; path = usr/lib/libsqlite3.tbd; sourceTree = SDKROOT; };
+		D102 /* Network.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Network.framework; path = System/Library/Frameworks/Network.framework; sourceTree = SDKROOT; };
+		D103 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		W100 /* job-scout */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = "job-scout"; sourceTree = BUILT_PRODUCTS_DIR; };
+		W101 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		W102 /* JobScoutWorker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JobScoutWorker.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		A200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (D001); runOnlyForDeploymentPostprocessing = 0; };
-		B200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (D001); runOnlyForDeploymentPostprocessing = 0; };
-		C200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (D001); runOnlyForDeploymentPostprocessing = 0; };
-		W200 = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (W014, W015, W016); runOnlyForDeploymentPostprocessing = 0; };
+		A200 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C25CF012306121AC0061F8E9 /* libsqlite3.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B200 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D001 /* libsqlite3.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C200 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C25CF013306121AC0061F8E9 /* libsqlite3.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W200 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W014 /* libsqlite3.tbd in Frameworks */,
+				W015 /* Network.framework in Frameworks */,
+				W016 /* AppKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A300 = {isa = PBXGroup; children = (A101, A102, A103, A104, A105, A106, A107, A108, A109, A110, A111, A112, A113, A114, A115, A117, A118, A119, A120, A121, A122, A123); path = JobApplicationWidget; sourceTree = "<group>"; };
-		B300 = {isa = PBXGroup; children = (B101, B102, B104); path = JobApplicationWidgetWidget; sourceTree = "<group>"; };
-		W300 = {isa = PBXGroup; children = (W101, W102); path = JobScoutWorker; sourceTree = "<group>"; };
-		A301 = {isa = PBXGroup; children = (A300, B300, W300); sourceTree = "<group>"; };
-		A302 = {isa = PBXGroup; children = (A100, B100, W100); name = Products; sourceTree = "<group>"; };
-		C300 = {isa = PBXGroup; children = (C101, C102, C103, C104, C105, C106, C107, C108, C109, C110, C111, C112, C113, C114, C115, C116); path = JobApplicationWidgetTests; sourceTree = "<group>"; };
-		C301 = {isa = PBXGroup; children = (A300, B300, W300, C300); sourceTree = "<group>"; };
+		A300 /* JobApplicationWidget */ = {
+			isa = PBXGroup;
+			children = (
+				A101 /* JobApplicationWidgetApp.swift */,
+				A102 /* ApplicationListView.swift */,
+				A103 /* ../Shared/ApplicationModel.swift */,
+				A104 /* JobApplicationWidget.entitlements */,
+				A105 /* JobApplicationWidget-Info.plist */,
+				A106 /* ../Shared/Job.swift */,
+				A107 /* ../Shared/DatabaseLocation.swift */,
+				A108 /* ../Shared/WidgetSummary.swift */,
+				A109 /* ../Shared/JobDatabase.swift */,
+				A110 /* ../Shared/LegacyJobMigrator.swift */,
+				A111 /* ApplicationStore.swift */,
+				A112 /* ../Shared/RunRecord.swift */,
+				A113 /* ../Shared/WorkerPaths.swift */,
+				A114 /* ../Shared/WorkerLock.swift */,
+				A115 /* ../Shared/NetworkGate.swift */,
+				A117 /* ../Shared/PowerEvents.swift */,
+				A118 /* ../Shared/WorkerResources.swift */,
+				A119 /* ../Shared/WorkerCoordinator.swift */,
+				A120 /* ../Shared/JSONBackupWriter.swift */,
+				A121 /* ../Shared/LaunchAgentInstaller.swift */,
+				A122 /* ../Shared/WorkerCommand.swift */,
+				A123 /* FetchController.swift */,
+			);
+			path = JobApplicationWidget;
+			sourceTree = "<group>";
+		};
+		A302 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A100 /* JobApplicationWidget.app */,
+				B100 /* JobApplicationWidgetExtension.appex */,
+				W100 /* job-scout */,
+				C25CF015306121AC0061F8E9 /* JobApplicationWidgetTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		B300 /* JobApplicationWidgetWidget */ = {
+			isa = PBXGroup;
+			children = (
+				B101 /* JobApplicationWidgetExtension.swift */,
+				B102 /* JobApplicationWidgetExtension-Info.plist */,
+				B104 /* JobApplicationWidgetExtension.entitlements */,
+			);
+			path = JobApplicationWidgetWidget;
+			sourceTree = "<group>";
+		};
+		C25CF014306121AC0061F8E9 /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				D101 /* libsqlite3.tbd */,
+				D102 /* Network.framework */,
+				D103 /* AppKit.framework */,
+			);
+			name = "Recovered References";
+			sourceTree = "<group>";
+		};
+		C300 /* JobApplicationWidgetTests */ = {
+			isa = PBXGroup;
+			children = (
+				C101 /* ProjectSmokeTests.swift */,
+				C102 /* JobModelTests.swift */,
+				C103 /* DatabaseLocationTests.swift */,
+				C104 /* JobDatabaseTests.swift */,
+				C105 /* TestDatabase.swift */,
+				C106 /* LegacyJobMigratorTests.swift */,
+				C107 /* ApplicationStoreTests.swift */,
+				C108 /* RunDatabaseTests.swift */,
+				C109 /* WorkerLockTests.swift */,
+				C110 /* NetworkGateTests.swift */,
+				C111 /* PowerAndResourceTests.swift */,
+				C112 /* WorkerCoordinatorTests.swift */,
+				C113 /* JSONBackupWriterTests.swift */,
+				C114 /* LaunchAgentInstallerTests.swift */,
+				C115 /* WorkerCommandTests.swift */,
+				C116 /* FetchControllerTests.swift */,
+				C117 /* WorkerAcceptanceTests.swift */,
+			);
+			path = JobApplicationWidgetTests;
+			sourceTree = "<group>";
+		};
+		C301 = {
+			isa = PBXGroup;
+			children = (
+				A300 /* JobApplicationWidget */,
+				B300 /* JobApplicationWidgetWidget */,
+				W300 /* JobScoutWorker */,
+				C300 /* JobApplicationWidgetTests */,
+				C25CF014306121AC0061F8E9 /* Recovered References */,
+			);
+			sourceTree = "<group>";
+		};
+		W300 /* JobScoutWorker */ = {
+			isa = PBXGroup;
+			children = (
+				W101 /* main.swift */,
+				W102 /* JobScoutWorker.entitlements */,
+			);
+			path = JobScoutWorker;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		A400 = {isa = PBXNativeTarget; buildConfigurationList = A500; buildPhases = (A600, A200, A601, A602, A603); buildRules = (); dependencies = (A700, A702); name = JobApplicationWidget; productName = JobApplicationWidget; productReference = A100; productType = "com.apple.product-type.application"; };
-		B400 = {isa = PBXNativeTarget; buildConfigurationList = B500; buildPhases = (B600, B200, B601); buildRules = (); dependencies = (); name = JobApplicationWidgetExtension; productName = JobApplicationWidgetExtension; productReference = B100; productType = "com.apple.product-type.app-extension"; };
-		C400 = {isa = PBXNativeTarget; buildConfigurationList = C500; buildPhases = (C600, C200); buildRules = (); dependencies = (C700); name = JobApplicationWidgetTests; productName = JobApplicationWidgetTests; productReference = C100; productType = "com.apple.product-type.bundle.unit-test"; };
-		W400 = {isa = PBXNativeTarget; buildConfigurationList = W500; buildPhases = (W600, W200); buildRules = (); dependencies = (); name = JobScoutWorker; productName = JobScoutWorker; productReference = W100; productType = "com.apple.product-type.tool"; };
+		A400 /* JobApplicationWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A500 /* Build configuration list for PBXNativeTarget "JobApplicationWidget" */;
+			buildPhases = (
+				A600 /* Sources */,
+				A200 /* Frameworks */,
+				A601 /* Resources */,
+				A602 /* Embed Foundation Extensions */,
+				A603 /* Embed Job Scout Worker */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A700 /* PBXTargetDependency */,
+				A702 /* PBXTargetDependency */,
+			);
+			name = JobApplicationWidget;
+			productName = JobApplicationWidget;
+			productReference = A100 /* JobApplicationWidget.app */;
+			productType = "com.apple.product-type.application";
+		};
+		B400 /* JobApplicationWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B500 /* Build configuration list for PBXNativeTarget "JobApplicationWidgetExtension" */;
+			buildPhases = (
+				B600 /* Sources */,
+				B200 /* Frameworks */,
+				B601 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JobApplicationWidgetExtension;
+			productName = JobApplicationWidgetExtension;
+			productReference = B100 /* JobApplicationWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		C400 /* JobApplicationWidgetTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C500 /* Build configuration list for PBXNativeTarget "JobApplicationWidgetTests" */;
+			buildPhases = (
+				C600 /* Sources */,
+				C200 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C700 /* PBXTargetDependency */,
+			);
+			name = JobApplicationWidgetTests;
+			productName = JobApplicationWidgetTests;
+			productReference = C25CF015306121AC0061F8E9 /* JobApplicationWidgetTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		W400 /* JobScoutWorker */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = W500 /* Build configuration list for PBXNativeTarget "JobScoutWorker" */;
+			buildPhases = (
+				W600 /* Sources */,
+				W200 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JobScoutWorker;
+			productName = JobScoutWorker;
+			productReference = W100 /* job-scout */;
+			productType = "com.apple.product-type.tool";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		A800 = {isa = PBXProject; attributes = { LastSwiftUpdateCheck = 1620; ORGANIZATIONNAME = Example; TargetAttributes = { A400 = { CreatedOnToolsVersion = 16.2; }; B400 = { CreatedOnToolsVersion = 16.2; }; C400 = { CreatedOnToolsVersion = 16.2; TestTargetID = A400; }; W400 = { CreatedOnToolsVersion = 16.2; }; }; }; buildConfigurationList = A900; compatibilityVersion = "Xcode 14.0"; developmentRegion = en; hasScannedForEncodings = 0; knownRegions = (en, Base); mainGroup = C301; productRefGroup = A302; projectDirPath = ""; projectRoot = ""; targets = (A400, B400, C400, W400); };
+		A800 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1620;
+				ORGANIZATIONNAME = Example;
+				TargetAttributes = {
+					A400 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					B400 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					C400 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = A400;
+					};
+					W400 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+				};
+			};
+			buildConfigurationList = A900 /* Build configuration list for PBXProject "JobApplicationWidget" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C301;
+			productRefGroup = A302 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A400 /* JobApplicationWidget */,
+				B400 /* JobApplicationWidgetExtension */,
+				C400 /* JobApplicationWidgetTests */,
+				W400 /* JobScoutWorker */,
+			);
+		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		A601 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		A602 = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (A008); name = "Embed Foundation Extensions"; runOnlyForDeploymentPostprocessing = 0; };
-		A603 = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = "Contents/Helpers"; dstSubfolderSpec = 1; files = (A027); name = "Embed Job Scout Worker"; runOnlyForDeploymentPostprocessing = 0; };
+		A601 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B601 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXRezBuildPhase section */
-		A600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (A001, A002, A003, A009, A010, A011, A012, A013, A014, A015, A016, A017, A018, A020, A021, A022, A023, A024, A025, A026); runOnlyForDeploymentPostprocessing = 0; };
-		B600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (B001, B004, B005, B006, B007, B010); runOnlyForDeploymentPostprocessing = 0; };
-		B601 = {isa = PBXResourcesBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
-		C600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (C001, C002, C003, C004, C005, C006, C007, C008, C009, C010, C011, C012, C013, C014, C015, C016, C017, C018, C019, C020, C021, C022, C023, C024); runOnlyForDeploymentPostprocessing = 0; };
-		W600 = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (W001, W002, W003, W004, W005, W006, W007, W008, W009, W010, W011, W012, W013, W017); runOnlyForDeploymentPostprocessing = 0; };
-/* End PBXRezBuildPhase section */
+/* Begin PBXSourcesBuildPhase section */
+		A600 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A001 /* JobApplicationWidgetApp.swift in Sources */,
+				A002 /* ApplicationListView.swift in Sources */,
+				A003 /* ../Shared/ApplicationModel.swift in Sources */,
+				A009 /* ../Shared/Job.swift in Sources */,
+				A010 /* ../Shared/DatabaseLocation.swift in Sources */,
+				A011 /* ../Shared/WidgetSummary.swift in Sources */,
+				A012 /* ../Shared/JobDatabase.swift in Sources */,
+				A013 /* ../Shared/LegacyJobMigrator.swift in Sources */,
+				A014 /* ApplicationStore.swift in Sources */,
+				A015 /* ../Shared/RunRecord.swift in Sources */,
+				A016 /* ../Shared/WorkerPaths.swift in Sources */,
+				A017 /* ../Shared/WorkerLock.swift in Sources */,
+				A018 /* ../Shared/NetworkGate.swift in Sources */,
+				A020 /* ../Shared/PowerEvents.swift in Sources */,
+				A021 /* ../Shared/WorkerResources.swift in Sources */,
+				A022 /* ../Shared/WorkerCoordinator.swift in Sources */,
+				A023 /* ../Shared/JSONBackupWriter.swift in Sources */,
+				A024 /* ../Shared/LaunchAgentInstaller.swift in Sources */,
+				A025 /* ../Shared/WorkerCommand.swift in Sources */,
+				A026 /* FetchController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B600 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B001 /* JobApplicationWidgetExtension.swift in Sources */,
+				B004 /* ../Shared/Job.swift in Sources */,
+				B005 /* ../Shared/DatabaseLocation.swift in Sources */,
+				B006 /* ../Shared/WidgetSummary.swift in Sources */,
+				B007 /* ../Shared/JobDatabase.swift in Sources */,
+				B010 /* ../Shared/RunRecord.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C600 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C001 /* ProjectSmokeTests.swift in Sources */,
+				C002 /* JobModelTests.swift in Sources */,
+				C003 /* DatabaseLocationTests.swift in Sources */,
+				C004 /* ../Shared/JobDatabase.swift in Sources */,
+				C005 /* ../Shared/Job.swift in Sources */,
+				C006 /* ../Shared/DatabaseLocation.swift in Sources */,
+				C007 /* ../Shared/WidgetSummary.swift in Sources */,
+				C008 /* JobDatabaseTests.swift in Sources */,
+				C009 /* TestDatabase.swift in Sources */,
+				C010 /* ../Shared/LegacyJobMigrator.swift in Sources */,
+				C011 /* LegacyJobMigratorTests.swift in Sources */,
+				C012 /* ../Shared/ApplicationModel.swift in Sources */,
+				C013 /* ApplicationStore.swift in Sources */,
+				C014 /* ApplicationStoreTests.swift in Sources */,
+				C015 /* ../Shared/RunRecord.swift in Sources */,
+				C016 /* RunDatabaseTests.swift in Sources */,
+				C017 /* WorkerLockTests.swift in Sources */,
+				C018 /* NetworkGateTests.swift in Sources */,
+				C019 /* PowerAndResourceTests.swift in Sources */,
+				C020 /* WorkerCoordinatorTests.swift in Sources */,
+				C021 /* JSONBackupWriterTests.swift in Sources */,
+				C022 /* LaunchAgentInstallerTests.swift in Sources */,
+				C023 /* WorkerCommandTests.swift in Sources */,
+				C024 /* FetchControllerTests.swift in Sources */,
+				C025 /* WorkerAcceptanceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		W600 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				W001 /* main.swift in Sources */,
+				W002 /* ../Shared/Job.swift in Sources */,
+				W003 /* ../Shared/DatabaseLocation.swift in Sources */,
+				W004 /* ../Shared/JobDatabase.swift in Sources */,
+				W005 /* ../Shared/RunRecord.swift in Sources */,
+				W006 /* ../Shared/WorkerPaths.swift in Sources */,
+				W007 /* ../Shared/WorkerLock.swift in Sources */,
+				W008 /* ../Shared/NetworkGate.swift in Sources */,
+				W009 /* ../Shared/PowerEvents.swift in Sources */,
+				W010 /* ../Shared/WorkerResources.swift in Sources */,
+				W011 /* ../Shared/WorkerCoordinator.swift in Sources */,
+				W012 /* ../Shared/JSONBackupWriter.swift in Sources */,
+				W013 /* ../Shared/WorkerCommand.swift in Sources */,
+				W017 /* ../Shared/WidgetSummary.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A700 = {isa = PBXTargetDependency; target = B400; targetProxy = A701; };
-		A701 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = B400; remoteInfo = JobApplicationWidgetExtension; };
-		A702 = {isa = PBXTargetDependency; target = W400; targetProxy = A703; };
-		A703 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = W400; remoteInfo = JobScoutWorker; };
-		C700 = {isa = PBXTargetDependency; target = A400; targetProxy = C701; };
-		C701 = {isa = PBXContainerItemProxy; containerPortal = A800; proxyType = 1; remoteGlobalIDString = A400; remoteInfo = JobApplicationWidget; };
+		A700 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B400 /* JobApplicationWidgetExtension */;
+			targetProxy = A701 /* PBXContainerItemProxy */;
+		};
+		A702 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = W400 /* JobScoutWorker */;
+			targetProxy = A703 /* PBXContainerItemProxy */;
+		};
+		C700 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A400 /* JobApplicationWidget */;
+			targetProxy = C701 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		A901 = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Debug; };
-		A902 = {isa = XCBuildConfiguration; buildSettings = { ALWAYS_SEARCH_USER_PATHS = NO; CLANG_ENABLE_MODULES = YES; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; }; name = Release; };
-		A903 = {isa = XCBuildConfiguration; buildSettings = { ENABLE_TESTABILITY = YES; PRODUCT_NAME = JobApplicationWidget; PRODUCT_MODULE_NAME = JobApplicationWidget; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot; INFOPLIST_FILE = JobApplicationWidget/JobApplicationWidget-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements; }; name = Debug; };
-		A904 = {isa = XCBuildConfiguration; buildSettings = { PRODUCT_NAME = JobApplicationWidget; PRODUCT_MODULE_NAME = JobApplicationWidget; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot; INFOPLIST_FILE = JobApplicationWidget/JobApplicationWidget-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements; }; name = Release; };
-		B901 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = JobApplicationWidgetExtension; PRODUCT_MODULE_NAME = JobApplicationWidgetExtension; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.extension; INFOPLIST_FILE = JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements; }; name = Debug; };
-		B902 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = JobApplicationWidgetExtension; PRODUCT_MODULE_NAME = JobApplicationWidgetExtension; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.extension; INFOPLIST_FILE = JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist; CODE_SIGN_ENTITLEMENTS = JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements; }; name = Release; };
-		C901 = {isa = XCBuildConfiguration; buildSettings = { BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; GENERATE_INFOPLIST_FILE = YES; PRODUCT_NAME = JobApplicationWidgetTests; PRODUCT_MODULE_NAME = JobApplicationWidgetTests; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.tests; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobApplicationWidget.app/Contents/MacOS/JobApplicationWidget"; }; name = Debug; };
-		C902 = {isa = XCBuildConfiguration; buildSettings = { BUNDLE_LOADER = "$(TEST_HOST)"; CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; GENERATE_INFOPLIST_FILE = YES; PRODUCT_NAME = JobApplicationWidgetTests; PRODUCT_MODULE_NAME = JobApplicationWidgetTests; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.tests; TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobApplicationWidget.app/Contents/MacOS/JobApplicationWidget"; }; name = Release; };
-		W901 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = "job-scout"; PRODUCT_MODULE_NAME = JobScoutWorker; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.worker; CODE_SIGN_ENTITLEMENTS = JobScoutWorker/JobScoutWorker.entitlements; }; name = Debug; };
-		W902 = {isa = XCBuildConfiguration; buildSettings = { CODE_SIGN_STYLE = Automatic; MACOSX_DEPLOYMENT_TARGET = 13.0; SDKROOT = macosx; SWIFT_VERSION = 5.0; PRODUCT_NAME = "job-scout"; PRODUCT_MODULE_NAME = JobScoutWorker; PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.worker; CODE_SIGN_ENTITLEMENTS = JobScoutWorker/JobScoutWorker.entitlements; }; name = Release; };
+		A901 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		A902 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		A903 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				DEVELOPMENT_TEAM = MK5G2TUHDV;
+				ENABLE_TESTABILITY = YES;
+				INFOPLIST_FILE = "JobApplicationWidget/JobApplicationWidget-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot;
+				PRODUCT_MODULE_NAME = JobApplicationWidget;
+				PRODUCT_NAME = JobApplicationWidget;
+			};
+			name = Debug;
+		};
+		A904 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = JobApplicationWidget/JobApplicationWidget.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				DEVELOPMENT_TEAM = MK5G2TUHDV;
+				INFOPLIST_FILE = "JobApplicationWidget/JobApplicationWidget-Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot;
+				PRODUCT_MODULE_NAME = JobApplicationWidget;
+				PRODUCT_NAME = JobApplicationWidget;
+			};
+			name = Release;
+		};
+		B901 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MK5G2TUHDV;
+				INFOPLIST_FILE = "JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.extension;
+				PRODUCT_MODULE_NAME = JobApplicationWidgetExtension;
+				PRODUCT_NAME = JobApplicationWidgetExtension;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		B902 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = JobApplicationWidgetWidget/JobApplicationWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MK5G2TUHDV;
+				INFOPLIST_FILE = "JobApplicationWidgetWidget/JobApplicationWidgetExtension-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.extension;
+				PRODUCT_MODULE_NAME = JobApplicationWidgetExtension;
+				PRODUCT_NAME = JobApplicationWidgetExtension;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		C901 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MK5G2TUHDV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.tests;
+				PRODUCT_MODULE_NAME = JobApplicationWidgetTests;
+				PRODUCT_NAME = JobApplicationWidgetTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobApplicationWidget.app/Contents/MacOS/JobApplicationWidget";
+			};
+			name = Debug;
+		};
+		C902 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = MK5G2TUHDV;
+				GENERATE_INFOPLIST_FILE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.tests;
+				PRODUCT_MODULE_NAME = JobApplicationWidgetTests;
+				PRODUCT_NAME = JobApplicationWidgetTests;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/JobApplicationWidget.app/Contents/MacOS/JobApplicationWidget";
+			};
+			name = Release;
+		};
+		W901 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = JobScoutWorker/JobScoutWorker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.worker;
+				PRODUCT_MODULE_NAME = JobScoutWorker;
+				PRODUCT_NAME = "job-scout";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		W902 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = JobScoutWorker/JobScoutWorker.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aobo.JobApplicationCopilot.worker;
+				PRODUCT_MODULE_NAME = JobScoutWorker;
+				PRODUCT_NAME = "job-scout";
+				SDKROOT = macosx;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		A500 = {isa = XCConfigurationList; buildConfigurations = (A903, A904); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		B500 = {isa = XCConfigurationList; buildConfigurations = (B901, B902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		A900 = {isa = XCConfigurationList; buildConfigurations = (A901, A902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		C500 = {isa = XCConfigurationList; buildConfigurations = (C901, C902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
-		W500 = {isa = XCConfigurationList; buildConfigurations = (W901, W902); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
+		A500 /* Build configuration list for PBXNativeTarget "JobApplicationWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A903 /* Debug */,
+				A904 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A900 /* Build configuration list for PBXProject "JobApplicationWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A901 /* Debug */,
+				A902 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B500 /* Build configuration list for PBXNativeTarget "JobApplicationWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B901 /* Debug */,
+				B902 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C500 /* Build configuration list for PBXNativeTarget "JobApplicationWidgetTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C901 /* Debug */,
+				C902 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		W500 /* Build configuration list for PBXNativeTarget "JobScoutWorker" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				W901 /* Debug */,
+				W902 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 	};
-	rootObject = A800;
+	rootObject = A800 /* Project object */;
 }

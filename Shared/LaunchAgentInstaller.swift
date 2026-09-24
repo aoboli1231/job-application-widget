@@ -46,12 +46,32 @@ final class LaunchAgentInstaller {
         self.commandRunner = commandRunner ?? Self.runCommand
     }
 
-    static func makePlist(workerURL: URL) -> [String: Any] {
-        [
+    static func makePlist(
+        workerURL: URL,
+        localTimeZone: TimeZone = .current,
+        startingAt date: Date = Date()
+    ) -> [String: Any] {
+        var melbourne = Calendar(identifier: .gregorian)
+        melbourne.timeZone = MelbourneSchedule.timeZone
+        var local = Calendar(identifier: .gregorian)
+        local.timeZone = localTimeZone
+        let firstDay = melbourne.startOfDay(for: date)
+        let localMinutes = Set((0..<370).compactMap { offset -> Int? in
+            guard let day = melbourne.date(byAdding: .day, value: offset, to: firstDay),
+                  let eight = melbourne.date(bySettingHour: 8, minute: 0, second: 0, of: day) else {
+                return nil
+            }
+            let components = local.dateComponents([.hour, .minute], from: eight)
+            guard let hour = components.hour, let minute = components.minute else { return nil }
+            return hour * 60 + minute
+        })
+        let intervals = localMinutes.sorted().map { ["Hour": $0 / 60, "Minute": $0 % 60] }
+        let calendarInterval: Any = intervals.count == 1 ? intervals[0] : intervals
+        return [
             "Label": label,
             "ProgramArguments": [workerURL.path, "--scheduled"],
             "RunAtLoad": true,
-            "StartCalendarInterval": ["Hour": 8, "Minute": 0]
+            "StartCalendarInterval": calendarInterval
         ]
     }
 

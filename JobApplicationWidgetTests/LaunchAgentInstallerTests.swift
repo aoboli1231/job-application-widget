@@ -5,7 +5,10 @@ import XCTest
 final class LaunchAgentInstallerTests: XCTestCase {
     func testPlistHasOnlyLoginAndEightAMTriggers() throws {
         let workerURL = URL(fileURLWithPath: "/Applications/Test App.app/Contents/Helpers/job-scout")
-        let plist = LaunchAgentInstaller.makePlist(workerURL: workerURL)
+        let plist = LaunchAgentInstaller.makePlist(
+            workerURL: workerURL,
+            localTimeZone: MelbourneSchedule.timeZone
+        )
 
         XCTAssertEqual(Set(plist.keys), ["Label", "ProgramArguments", "RunAtLoad", "StartCalendarInterval"])
         XCTAssertEqual(plist["Label"] as? String, LaunchAgentInstaller.label)
@@ -16,6 +19,23 @@ final class LaunchAgentInstallerTests: XCTestCase {
         for forbidden in ["StartInterval", "KeepAlive", "WatchPaths", "QueueDirectories"] {
             XCTAssertNil(plist[forbidden])
         }
+    }
+
+    func testShanghaiClockCoversMelbourneEightAcrossDaylightSaving() throws {
+        let workerURL = URL(fileURLWithPath: "/tmp/job-scout")
+        let shanghai = try XCTUnwrap(TimeZone(identifier: "Asia/Shanghai"))
+        let start = try XCTUnwrap(ISO8601DateFormatter().date(from: "2026-09-24T00:00:00Z"))
+        let plist = LaunchAgentInstaller.makePlist(
+            workerURL: workerURL,
+            localTimeZone: shanghai,
+            startingAt: start
+        )
+
+        XCTAssertEqual(plist["StartCalendarInterval"] as? [[String: Int]], [
+            ["Hour": 5, "Minute": 0],
+            ["Hour": 6, "Minute": 0]
+        ])
+        XCTAssertEqual(Set(plist.keys), ["Label", "ProgramArguments", "RunAtLoad", "StartCalendarInterval"])
     }
 
     func testPlistRoundTripsAsXML() throws {
